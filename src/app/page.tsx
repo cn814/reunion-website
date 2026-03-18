@@ -56,19 +56,16 @@ export default function Home() {
           <p className="text-zinc-500 mb-12 italic">
             Forever in our hearts. Remembering the classmates we've lost since 2006.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
-            <div className="text-center">
-              <div className="aspect-square glass rounded-full mb-4 mx-auto border-white/5" />
-              <p className="text-sm font-bold text-zinc-400">Classmate Name</p>
-            </div>
-            <div className="text-center">
-              <div className="aspect-square glass rounded-full mb-4 mx-auto border-white/5" />
-              <p className="text-sm font-bold text-zinc-400">Classmate Name</p>
-            </div>
-            <div className="text-center">
-              <div className="aspect-square glass rounded-full mb-4 mx-auto border-white/5" />
-              <p className="text-sm font-bold text-zinc-400">Classmate Name</p>
-            </div>
+          <div className="flex justify-center opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
+            <a href="https://askew-houser.com/tribute/details/517" target="_blank" rel="noopener noreferrer" className="text-center group block max-w-sm">
+              <div className="aspect-square glass rounded-full mb-6 mx-auto border-white/5 w-48 h-48 flex items-center justify-center bg-zinc-900 group-hover:bg-zinc-800 transition-colors shadow-xl">
+                <span className="text-zinc-600 text-5xl font-black tracking-tighter">BJK</span>
+              </div>
+              <p className="text-xl font-bold text-zinc-300 group-hover:text-white transition-colors">Bryce J. Kupchella</p>
+              <p className="text-sm text-zinc-500 mt-2 italic px-4">
+                "Death is a natural part of life. Rejoice for those around you who transform into the Force. Mourn them do not. Miss them do not." - YODA
+              </p>
+            </a>
           </div>
         </div>
       </section>
