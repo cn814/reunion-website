@@ -107,7 +107,7 @@ export default function NostalgiaSection() {
                   ))}
                 </ul>
               </div>
-              <div className="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-[0.07] group-hover:opacity-[0.15] transition-opacity grayscale pointer-events-none">
+              <div className="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 opacity-[0.25] group-hover:opacity-[0.4] transition-opacity pointer-events-none">
                 {(card as any).image && <Image src={(card as any).image} alt={card.title} fill className="object-cover" />}
               </div>
             </div>
