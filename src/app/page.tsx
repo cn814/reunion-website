@@ -14,8 +14,9 @@ export default function Home() {
       <Countdown />
 
       {/* RSVP Section */}
-      <section id="rsvp" className="py-24 bg-gradient-to-b from-husky-black to-husky-blue/10">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section id="rsvp" className="py-24 bg-gradient-to-b from-husky-black to-husky-blue/10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-husky-pattern opacity-30"></div>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-black mb-6 uppercase tracking-tight">Are You Coming?</h2>
           <p className="text-xl text-zinc-400 mb-12">
             We can't wait to see everyone. RSVP by August 1st to help us finalize the headcount.
@@ -27,8 +28,9 @@ export default function Home() {
       </section>
 
       {/* Payments Section */}
-      <section id="payments" className="py-24 bg-husky-black">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section id="payments" className="py-24 bg-husky-charcoal relative overflow-hidden">
+        <div className="absolute inset-0 bg-husky-pattern opacity-20"></div>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-black mb-6 uppercase tracking-tight text-gradient">Payment Hub</h2>
           <p className="text-xl text-zinc-400 mb-12">
             The reunion cost is <span className="text-white font-bold">$25 per person</span>. <br />
@@ -82,8 +84,9 @@ export default function Home() {
       <NostalgiaSection />
 
       {/* Details Section */}
-      <section id="details" className="py-24 bg-husky-black">
-        <div className="max-w-6xl mx-auto px-4">
+      <section id="details" className="py-24 bg-husky-charcoal relative overflow-hidden">
+        <div className="absolute inset-0 bg-husky-pattern opacity-20"></div>
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl font-black mb-8 uppercase tracking-tight">The Deets</h2>
