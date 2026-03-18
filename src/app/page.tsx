@@ -15,7 +15,6 @@ export default function Home() {
 
       {/* RSVP Section */}
       <section id="rsvp" className="py-24 bg-gradient-to-b from-husky-black to-husky-blue/10 relative overflow-hidden text-white">
-        <div className="absolute inset-0 bg-husky-pattern opacity-80 mix-blend-overlay"></div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-black mb-6 uppercase tracking-tight">Are You Coming?</h2>
           <p className="text-xl text-zinc-400 mb-12">
@@ -29,7 +28,6 @@ export default function Home() {
 
       {/* Payments Section */}
       <section id="payments" className="py-24 bg-husky-charcoal relative overflow-hidden">
-        <div className="absolute inset-0 bg-husky-pattern opacity-60 mix-blend-soft-light"></div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-black mb-6 uppercase tracking-tight text-gradient">Payment Hub</h2>
           <p className="text-xl text-zinc-400 mb-12">
@@ -85,7 +83,6 @@ export default function Home() {
 
       {/* Details Section */}
       <section id="details" className="py-24 bg-husky-charcoal relative overflow-hidden">
-        <div className="absolute inset-0 bg-husky-pattern opacity-60"></div>
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>

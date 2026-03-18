@@ -34,7 +34,6 @@ export default function Countdown() {
 
     return (
         <section className="py-16 bg-husky-black relative overflow-hidden">
-            <div className="absolute inset-0 bg-husky-pattern opacity-50"></div>
             <div className="max-w-4xl mx-auto px-4 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
                     <div className="text-center md:text-left">
