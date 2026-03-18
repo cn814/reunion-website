@@ -2,14 +2,12 @@ import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import Yearbook from "@/components/Yearbook";
 import RSVPForm from "@/components/RSVPForm";
-import AudioTeaser from "@/components/AudioTeaser";
 import GraduationVideo from "@/components/GraduationVideo";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-husky-black">
       <Hero />
-      <AudioTeaser />
       <GraduationVideo />
       <Countdown />
 
