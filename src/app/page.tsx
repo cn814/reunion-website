@@ -88,15 +88,7 @@ export default function Home() {
                 </li>
               </ul>
 
-              <div className="mt-12 p-6 glass rounded-2xl border-husky-blue/20">
-                <h4 className="font-black mb-2 uppercase text-husky-light-blue">Photo Dropzone</h4>
-                <p className="text-sm text-zinc-400 mb-4">
-                  Got high-res photos from 2006 or recent years? Upload them here for the 10-minute fireworks slideshow!
-                </p>
-                <button className="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-bold transition-all">
-                  UPLOAD PHOTOS
-                </button>
-              </div>
+
             </div>
 
             <div className="h-96 rounded-3xl overflow-hidden glass border-white/10 relative shadow-2xl">
