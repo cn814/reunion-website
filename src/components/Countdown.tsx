@@ -33,16 +33,36 @@ export default function Countdown() {
     }, [targetDate]);
 
     return (
-        <section className="py-20 bg-husky-black">
-            <div className="max-w-4xl mx-auto px-4">
-                <h3 className="text-center text-zinc-500 uppercase tracking-widest font-bold mb-10">
-                    The Countdown is On
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <TimeUnit label="Days" value={timeLeft.days} />
-                    <TimeUnit label="Hours" value={timeLeft.hours} />
-                    <TimeUnit label="Minutes" value={timeLeft.minutes} />
-                    <TimeUnit label="Seconds" value={timeLeft.seconds} />
+        <section className="py-16 bg-husky-black relative overflow-hidden">
+            <div className="absolute inset-0 bg-husky-pattern opacity-50"></div>
+            <div className="max-w-4xl mx-auto px-4 relative z-10">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
+                    <div className="text-center md:text-left">
+                        <h3 className="text-husky-light-blue uppercase tracking-[0.3em] font-black text-sm mb-1">
+                            The Reunion is In
+                        </h3>
+                    </div>
+                    <div className="flex items-center gap-4 md:gap-8 font-black text-2xl md:text-5xl tracking-tighter text-white">
+                        <div className="flex flex-col items-center">
+                            <span>{timeLeft.days}</span>
+                            <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Days</span>
+                        </div>
+                        <span className="text-husky-light-blue/30 mb-4">:</span>
+                        <div className="flex flex-col items-center">
+                            <span>{timeLeft.hours.toString().padStart(2, "0")}</span>
+                            <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Hrs</span>
+                        </div>
+                        <span className="text-husky-light-blue/30 mb-4">:</span>
+                        <div className="flex flex-col items-center">
+                            <span>{timeLeft.minutes.toString().padStart(2, "0")}</span>
+                            <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Min</span>
+                        </div>
+                        <span className="text-husky-light-blue/30 mb-4">:</span>
+                        <div className="flex flex-col items-center">
+                            <span>{timeLeft.seconds.toString().padStart(2, "0")}</span>
+                            <span className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Sec</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
