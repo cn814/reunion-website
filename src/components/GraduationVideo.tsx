@@ -10,17 +10,16 @@ export default function GraduationVideo() {
                 </p>
 
                 <div className="aspect-video w-full max-w-4xl mx-auto rounded-3xl overflow-hidden glass border-white/10 relative shadow-2xl">
-                    {/* Placeholder for Video Player */}
-                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756eaa539?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-40 blur-[2px]" />
-                    <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-8">
-                        <div className="w-20 h-20 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 mb-4">
-                            <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[18px] border-l-white border-b-[12px] border-b-transparent ml-1" />
-                        </div>
-                        <p className="text-white font-bold opacity-80 uppercase tracking-widest">Graduation 2006: The Full Video</p>
-                        <p className="mt-4 text-sm text-zinc-500 max-w-md">
-                            (Plex server linked for high-res playback)
-                        </p>
-                    </div>
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        src="https://www.youtube.com/embed/jY0EWkCIukk" 
+                        title="2006 Graduation Ceremony" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                    ></iframe>
                 </div>
             </div>
         </section>
