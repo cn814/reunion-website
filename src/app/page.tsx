@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
-import Yearbook from "@/components/Yearbook";
 import RSVPForm from "@/components/RSVPForm";
 import GraduationVideo from "@/components/GraduationVideo";
 
@@ -10,8 +9,6 @@ export default function Home() {
       <Hero />
       <GraduationVideo />
       <Countdown />
-
-      <Yearbook />
 
       {/* RSVP Section */}
       <section id="rsvp" className="py-24 bg-gradient-to-b from-husky-black to-husky-blue/10">
