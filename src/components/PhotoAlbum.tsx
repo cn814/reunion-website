@@ -62,7 +62,7 @@ export default function PhotoAlbum() {
         setCaption('');
         setName('');
       } else {
-        const error = await res.json();
+        const error = await res.json() as any;
         alert(`Upload failed: ${error.error || 'Unknown error'}`);
       }
     } catch (err) {
