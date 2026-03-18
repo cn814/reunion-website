@@ -35,15 +35,15 @@ export default function Home() {
           </p>
 
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <a href="#" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105">
-              VENMO @DAN-SMITH
+            <a href="#" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
+              VENMO @BCHSclassof20206
             </a>
-            <a href="#" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105">
-              PAYPAL @DAN-SMITH
+            <a href="#" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
+              PAYPAL @BCHSclassof20206
             </a>
           </div>
           <p className="mt-8 text-zinc-500 text-sm">
-            Paying Dan in cash? No problem. He'll check you off the list manually.
+            Paying in cash? No problem. Reach out to the committee and we'll check you off the list manually.
           </p>
         </div>
       </section>
