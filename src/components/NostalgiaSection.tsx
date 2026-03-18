@@ -61,7 +61,6 @@ export default function NostalgiaSection() {
   return (
     <section id="nostalgia" className="py-24 bg-husky-charcoal relative overflow-hidden">
       {/* Background Decorative Element */}
-      <div className="absolute inset-0 bg-husky-pattern opacity-20"></div>
       <div className="absolute top-0 right-0 w-96 h-96 bg-husky-blue/5 rounded-full blur-3xl -mr-48 -mt-24 pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-husky-blue/5 rounded-full blur-3xl -ml-48 -mb-24 pointer-events-none"></div>
 
