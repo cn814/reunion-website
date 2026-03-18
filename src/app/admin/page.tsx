@@ -34,7 +34,7 @@ function AdminContent() {
     try {
       const res = await fetch(`/api/admin/photos?key=${key}`);
       if (res.ok) {
-        const data = await res.json();
+        const data = await res.json() as Photo[];
         setPhotos(data);
       }
     } catch (err) {

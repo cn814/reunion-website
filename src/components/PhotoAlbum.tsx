@@ -28,7 +28,7 @@ export default function PhotoAlbum() {
   const fetchPhotos = async () => {
     try {
       const res = await fetch('/api/photos');
-      const data = await res.json();
+      const data = await res.json() as Photo[];
       setPhotos(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Failed to fetch photos', err);
