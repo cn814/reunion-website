@@ -6,6 +6,7 @@ import Image from "next/image";
 import PhotoAlbum from "@/components/PhotoAlbum";
 import NostalgiaSection from "@/components/NostalgiaSection";
 import Navbar from "@/components/Navbar";
+import PhotoBackground from "@/components/PhotoBackground";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
 
       {/* RSVP Section */}
       <section id="rsvp" className="py-24 bg-gradient-to-b from-husky-black to-husky-blue/10 relative overflow-hidden text-white">
+        <PhotoBackground />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-black mb-6 uppercase tracking-tight">Are You Coming?</h2>
           <p className="text-xl text-zinc-400 mb-12">
@@ -30,6 +32,7 @@ export default function Home() {
 
       {/* Payments Section */}
       <section id="payments" className="py-24 bg-husky-charcoal relative overflow-hidden">
+        <PhotoBackground />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-black mb-6 uppercase tracking-tight text-gradient">Payment Hub</h2>
           <p className="text-xl text-zinc-400 mb-12">
@@ -80,11 +83,9 @@ export default function Home() {
       {/* Photo Album Section */}
       <PhotoAlbum />
 
-      {/* Nostalgia Section */}
-      <NostalgiaSection />
-
       {/* Details Section */}
       <section id="details" className="py-24 bg-husky-charcoal relative overflow-hidden">
+        <PhotoBackground />
         <div className="max-w-6xl mx-auto px-4 relative z-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -117,6 +118,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Nostalgia Section (Time Capsule) */}
+      <NostalgiaSection />
 
       {/* Footer */}
       <footer className="py-12 border-t border-white/10 text-center text-zinc-500 text-sm bg-black">

@@ -3,7 +3,7 @@ import { ArrowDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center justify-center">
       {/* Background with Grainy Overlay Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/60 z-10" />
@@ -35,7 +35,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer text-white/60 hover:text-white transition-colors">
+      <div className="absolute bottom-24 md:bottom-12 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer text-white/80 hover:text-white transition-colors drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">
         <ArrowDown size={32} />
       </div>
     </section>

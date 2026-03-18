@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Upload, X, ShieldCheck, Heart } from 'lucide-react';
+import { Upload, X, ShieldCheck, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Photo {
   id: number;
@@ -96,23 +96,8 @@ export default function PhotoAlbum() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-husky-light-blue"></div>
           </div>
         ) : photos.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {photos.map((photo) => (
-              <div key={photo.id} className="group relative glass rounded-2xl overflow-hidden aspect-square border-white/5 ring-1 ring-white/10 hover:ring-husky-light-blue/50 transition-all">
-                <Image 
-                  src={photo.url} 
-                  alt={photo.caption || 'Class Memory'} 
-                  fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
-                  <p className="text-white font-bold text-lg">{photo.caption}</p>
-                  <p className="text-zinc-400 text-sm flex items-center gap-1 mt-1">
-                    <Heart size={12} className="text-husky-light-blue" /> {photo.uploaded_by}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="relative max-w-4xl mx-auto h-[500px] md:h-[600px] rounded-3xl overflow-hidden glass border-white/10 shadow-2xl group">
+            <Slideshow photos={photos} />
           </div>
         ) : (
           <div className="text-center py-20 border-2 border-dashed border-white/10 rounded-3xl bg-white/5">
@@ -182,5 +167,69 @@ export default function PhotoAlbum() {
         </div>
       )}
     </section>
+  );
+}
+
+function Slideshow({ photos }: { photos: Photo[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % photos.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [photos.length]);
+
+  const next = () => setCurrentIndex((prev) => (prev + 1) % photos.length);
+  const prev = () => setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
+
+  return (
+    <div className="relative w-full h-full group/slide">
+      {photos.map((photo, index) => (
+        <div 
+          key={photo.id}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        >
+          <Image 
+            src={photo.url} 
+            alt={photo.caption || 'Class Memory'} 
+            fill 
+            className="object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
+            <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
+            <p className="text-zinc-300 flex items-center gap-2">
+              <Heart size={16} className="text-husky-light-blue" />
+              Uploaded by <span className="text-white font-semibold">{photo.uploaded_by}</span>
+            </p>
+          </div>
+        </div>
+      ))}
+
+      {/* Navigation Controls */}
+      <button 
+        onClick={prev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-husky-blue/80 text-white transition-all opacity-0 group-hover/slide:opacity-100"
+      >
+        <ChevronLeft size={24} />
+      </button>
+      <button 
+        onClick={next}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-husky-blue/80 text-white transition-all opacity-0 group-hover/slide:opacity-100"
+      >
+        <ChevronRight size={24} />
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {photos.map((_, i) => (
+          <button 
+            key={i}
+            onClick={() => setCurrentIndex(i)}
+            className={`w-2 h-2 rounded-full transition-all ${i === currentIndex ? 'w-8 bg-husky-light-blue' : 'bg-white/30 hover:bg-white/50'}`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
