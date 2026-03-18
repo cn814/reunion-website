@@ -4,6 +4,7 @@ import RSVPForm from "@/components/RSVPForm";
 import GraduationVideo from "@/components/GraduationVideo";
 import Image from "next/image";
 import PhotoAlbum from "@/components/PhotoAlbum";
+import NostalgiaSection from "@/components/NostalgiaSection";
 
 export default function Home() {
   return (
@@ -76,6 +77,9 @@ export default function Home() {
 
       {/* Photo Album Section */}
       <PhotoAlbum />
+
+      {/* Nostalgia Section */}
+      <NostalgiaSection />
 
       {/* Details Section */}
       <section id="details" className="py-24 bg-husky-black">
