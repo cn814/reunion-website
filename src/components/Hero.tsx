@@ -6,7 +6,7 @@ export default function Hero() {
       {/* Background with Grainy Overlay Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/60 z-10" />
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-50 contrast-125" />
+        <div className="absolute inset-0 bg-[url('/photos/GkFskcqWs7PkUngjTIHSyf5XzaXKxX9r5MeB8bGis3u9xTia3678345000705911348.jpg')] bg-cover bg-center grayscale opacity-50 contrast-125" />
         <div className="absolute inset-0 noise-overlay opacity-20 z-20" />
       </div>
 

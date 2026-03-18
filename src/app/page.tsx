@@ -108,7 +108,7 @@ export default function Home() {
             </div>
 
             <div className="h-96 rounded-3xl overflow-hidden glass border-white/10 relative shadow-2xl">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-30 blur-sm" />
+              <div className="absolute inset-0 bg-[url('/photos/bishop-carroll-catholic-high-school-ebensburg-pa-primaryphoto.jpg')] bg-cover bg-center opacity-30 blur-sm" />
               <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center p-8">
                 <p className="text-white font-black text-2xl mb-2 drop-shadow-md uppercase tracking-tighter">See You in Ebensburg</p>
                 <a href="https://maps.google.com" target="_blank" className="text-husky-light-blue underline font-bold">Open in Google Maps</a>

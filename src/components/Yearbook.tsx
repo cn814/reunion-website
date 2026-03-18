@@ -4,8 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 
 const classmates = [
-    { id: 1, name: "Name 1", rsvp: "Yes", thenImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop", nowImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop" },
-    { id: 2, name: "Name 2", rsvp: "Maybe", thenImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop", nowImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop" },
+    { id: 1, name: "Name 1", rsvp: "Yes", thenImg: "/photos/1630564089133.jpg", nowImg: "/photos/PXL_20250810_165555584.MP.jpg" },
+    { id: 2, name: "Name 2", rsvp: "Maybe", thenImg: "/photos/4dd63340-c009-4e3f-bc13-38ebcbea49c0.webp", nowImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop" },
     { id: 3, name: "Name 3", rsvp: "Yes", thenImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop", nowImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop" },
     { id: 4, name: "Name 4", rsvp: "No", thenImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop", nowImg: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop" },
     // Add more as needed
