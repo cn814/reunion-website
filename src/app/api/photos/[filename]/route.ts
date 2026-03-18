@@ -5,7 +5,7 @@ export const runtime = 'edge';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
     const { env } = await getCloudflareContext({ async: true });
@@ -15,7 +15,7 @@ export async function GET(
       return NextResponse.json({ error: 'R2 Bucket not configured' }, { status: 500 });
     }
 
-    const { filename } = params;
+    const { filename } = await params;
     const object = await bucket.get(filename);
 
     if (!object) {
