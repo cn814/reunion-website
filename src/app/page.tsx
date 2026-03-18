@@ -36,10 +36,10 @@ export default function Home() {
 
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <a href="#" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
-              VENMO @BCHSclassof20206
+              VENMO @BCHSclassof2006
             </a>
             <a href="#" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
-              PAYPAL @BCHSclassof20206
+              PAYPAL @BCHSclassof2006
             </a>
           </div>
           <p className="mt-8 text-zinc-500 text-sm">
