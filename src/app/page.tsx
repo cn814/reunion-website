@@ -33,15 +33,15 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl font-black mb-6 uppercase tracking-tight text-gradient">Payment Hub</h2>
           <p className="text-xl text-zinc-400 mb-12">
-            The reunion cost is <span className="text-white font-bold">$25 per person</span>. <br />
-            This covers the buffet, venue, and a small class donation for future events.
+            The reunion cost is <span className="text-white font-bold">$26.50 per person</span>. <br />
+            This covers the buffet, venue, and processing fees.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <a href="venmo://paycharge?txn=pay&recipients=BCHSclassof2006&amount=25&note=BCHS%202006%20Reunion" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
+            <a href="venmo://paycharge?txn=pay&recipients=BCHSclassof2006&amount=26.50&note=BCHS%202006%20Reunion" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
               VENMO @BCHSclassof2006
             </a>
-            <a href="https://paypal.me/BCHSclassof2006/25" target="_blank" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
+            <a href="https://paypal.me/BCHSclassof2006/26.50" target="_blank" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
               PAYPAL @BCHSclassof2006
             </a>
           </div>
