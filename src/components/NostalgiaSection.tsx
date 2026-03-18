@@ -14,7 +14,7 @@ const highlights = [
   {
     title: 'THE HEADLINES',
     icon: Newspaper,
-    image: 'https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/c/c2/Myspace_2006.png',
+    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
     items: [
       'Pluto is officially demoted to a "Dwarf Planet"',
       'Google acquires YouTube for $1.65 Billion',
@@ -25,7 +25,7 @@ const highlights = [
   {
     title: 'THE SOUNDTRACK',
     icon: Music,
-    image: 'https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/f/f3/Justin_Timberlake_-_FutureSex_LoveSounds.png',
+    image: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=400&q=80',
     items: [
       '"Bad Day" - Daniel Powter (Year-end #1)',
       '"SexyBack" - Justin Timberlake',
@@ -36,7 +36,7 @@ const highlights = [
   {
     title: 'THE BIG SCREEN',
     icon: Film,
-    image: 'https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/5/5a/Pirates_of_the_Caribbean_-_Dead_Man%27s_Chest.jpg',
+    image: 'https://images.unsplash.com/photo-1599421141441-2a13cc7f382f?auto=format&fit=crop&w=400&q=80',
     items: [
       'Pirates of the Caribbean: Dead Man\'s Chest',
       'Cars (Pixar\'s latest hit)',
