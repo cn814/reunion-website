@@ -14,7 +14,7 @@ const highlights = [
   {
     title: 'THE HEADLINES',
     icon: Newspaper,
-    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
+    image: '/photos/nostalgia/fb-vs-twtr.jpg',
     items: [
       'Pluto is officially demoted to a "Dwarf Planet"',
       'Google acquires YouTube for $1.65 Billion',
@@ -25,7 +25,7 @@ const highlights = [
   {
     title: 'THE SOUNDTRACK',
     icon: Music,
-    image: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=400&q=80',
+    image: '/photos/nostalgia/SexyBack.png',
     items: [
       '"Bad Day" - Daniel Powter (Year-end #1)',
       '"SexyBack" - Justin Timberlake',
@@ -36,7 +36,7 @@ const highlights = [
   {
     title: 'THE BIG SCREEN',
     icon: Film,
-    image: 'https://images.unsplash.com/photo-1599421141441-2a13cc7f382f?auto=format&fit=crop&w=400&q=80',
+    image: '/photos/nostalgia/Pirates_of_the_caribbean_2_poster_b.jpg',
     items: [
       'Pirates of the Caribbean: Dead Man\'s Chest',
       'Cars (Pixar\'s latest hit)',
@@ -47,7 +47,7 @@ const highlights = [
   {
     title: 'THE VIBE',
     icon: Smartphone,
-    image: '/nostalgia/razr.png',
+    image: '/photos/nostalgia/Wii-Console.png',
     items: [
       'The Motorola RAZR is the must-have phone',
       'Myspace is the #1 social network in the US',
@@ -57,10 +57,29 @@ const highlights = [
   },
 ];
 
+const collageImages = [
+    '/photos/nostalgia/fb-vs-twtr.jpg',
+    '/photos/nostalgia/SexyBack.png',
+    '/photos/nostalgia/Pirates_of_the_caribbean_2_poster_b.jpg',
+    '/photos/nostalgia/Wii-Console.png',
+    '/photos/nostalgia/Irreplaceable.png',
+    '/photos/nostalgia/61QXxSlFv6L._AC_UY900_.jpg',
+    '/photos/nostalgia/MV5BMWQ1ZDM4NDktMWY0NC00MjcxLWJlMDMtNmE2MGVhYzRjMWQ0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg',
+];
+
 export default function NostalgiaSection() {
   return (
     <section id="nostalgia" className="py-24 bg-husky-charcoal relative overflow-hidden">
-      {/* Background Decorative Element */}
+      {/* Immersive Photo Collage Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none grid grid-cols-2 md:grid-cols-4 gap-4 p-4 grayscale group">
+        {collageImages.map((src, i) => (
+            <div key={i} className={`relative aspect-square overflow-hidden rounded-2xl ${i % 2 === 0 ? 'mt-12' : ''} ${i % 3 === 0 ? '-rotate-3' : 'rotate-3'}`}>
+                <img src={src} alt="" className="w-full h-full object-cover" />
+            </div>
+        ))}
+      </div>
+
+      {/* Decorative Gradients */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-husky-blue/5 rounded-full blur-3xl -mr-48 -mt-24 pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-husky-blue/5 rounded-full blur-3xl -ml-48 -mb-24 pointer-events-none"></div>
 
