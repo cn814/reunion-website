@@ -2,6 +2,8 @@ import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import RSVPForm from "@/components/RSVPForm";
 import GraduationVideo from "@/components/GraduationVideo";
+import Image from "next/image";
+import PhotoAlbum from "@/components/PhotoAlbum";
 
 export default function Home() {
   return (
@@ -55,8 +57,13 @@ export default function Home() {
           </p>
           <div className="flex justify-center opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
             <a href="https://askew-houser.com/tribute/details/517" target="_blank" rel="noopener noreferrer" className="text-center group block max-w-sm">
-              <div className="aspect-square glass rounded-full mb-6 mx-auto border-white/5 w-48 h-48 flex items-center justify-center bg-zinc-900 group-hover:bg-zinc-800 transition-colors shadow-xl">
-                <span className="text-zinc-600 text-5xl font-black tracking-tighter">BJK</span>
+              <div className="aspect-square glass rounded-full mb-6 mx-auto border-white/5 w-48 h-48 overflow-hidden bg-zinc-900 group-hover:bg-zinc-800 transition-colors shadow-xl relative">
+                <Image 
+                  src="/photos/bryce.jpg" 
+                  alt="Bryce J. Kupchella" 
+                  fill 
+                  className="object-cover"
+                />
               </div>
               <p className="text-xl font-bold text-zinc-300 group-hover:text-white transition-colors">Bryce J. Kupchella</p>
               <p className="text-sm text-zinc-500 mt-2 italic px-4">
@@ -66,6 +73,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Photo Album Section */}
+      <PhotoAlbum />
 
       {/* Details Section */}
       <section id="details" className="py-24 bg-husky-black">

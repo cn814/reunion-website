@@ -16,9 +16,22 @@
       "service": "reunion-website"
     }
   ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "reunion-photos"
+    }
+  ],
   "images": {
     "binding": "IMAGES"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "reunion-db",
+      "database_id": "58986c08-8469-4144-a235-4450d4ddbaf3"
+    }
+  ],
   "observability": {
     "enabled": true
   }
