@@ -5,10 +5,12 @@ import GraduationVideo from "@/components/GraduationVideo";
 import Image from "next/image";
 import PhotoAlbum from "@/components/PhotoAlbum";
 import NostalgiaSection from "@/components/NostalgiaSection";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-husky-black">
+      <Navbar />
       <Hero />
       <GraduationVideo />
       <Countdown />

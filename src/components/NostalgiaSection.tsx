@@ -14,7 +14,7 @@ const highlights = [
   {
     title: 'THE HEADLINES',
     icon: Newspaper,
-    image: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c2/Myspace_2006.png/400px-Myspace_2006.png',
+    image: 'https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/c/c2/Myspace_2006.png',
     items: [
       'Pluto is officially demoted to a "Dwarf Planet"',
       'Google acquires YouTube for $1.65 Billion',
@@ -25,7 +25,7 @@ const highlights = [
   {
     title: 'THE SOUNDTRACK',
     icon: Music,
-    image: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Justin_Timberlake_-_FutureSex_LoveSounds.png/220px-Justin_Timberlake_-_FutureSex_LoveSounds.png',
+    image: 'https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/f/f3/Justin_Timberlake_-_FutureSex_LoveSounds.png',
     items: [
       '"Bad Day" - Daniel Powter (Year-end #1)',
       '"SexyBack" - Justin Timberlake',
@@ -36,7 +36,7 @@ const highlights = [
   {
     title: 'THE BIG SCREEN',
     icon: Film,
-    image: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Pirates_of_the_Caribbean_-_Dead_Man%27s_Chest.jpg/220px-Pirates_of_the_Caribbean_-_Dead_Man%27s_Chest.jpg',
+    image: 'https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/5/5a/Pirates_of_the_Caribbean_-_Dead_Man%27s_Chest.jpg',
     items: [
       'Pirates of the Caribbean: Dead Man\'s Chest',
       'Cars (Pixar\'s latest hit)',
@@ -47,7 +47,7 @@ const highlights = [
   {
     title: 'THE VIBE',
     icon: Smartphone,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Motorola_RAZR-V3.png/400px-Motorola_RAZR-V3.png',
+    image: '/nostalgia/razr.png',
     items: [
       'The Motorola RAZR is the must-have phone',
       'Myspace is the #1 social network in the US',
