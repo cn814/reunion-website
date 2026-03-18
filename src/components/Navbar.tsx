@@ -32,7 +32,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <a
-                key={item.item}
+                key={item.name}
                 href={item.href}
                 className="text-white/70 hover:text-husky-light-blue text-xs uppercase font-black tracking-widest transition-colors"
                 onClick={(e) => {
