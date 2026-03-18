@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export const runtime = 'edge';
 
@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { env } = getRequestContext() as any;
-    const db = env.DB;
+    const { env } = await getCloudflareContext({ async: true });
+    const db = env.DB as any;
 
     const { results } = await db.prepare(
       "SELECT * FROM photos ORDER BY created_at DESC"
@@ -31,14 +31,14 @@ export async function GET(req: NextRequest) {
 // POST update photo status
 export async function POST(req: NextRequest) {
   try {
-    const { id, status, key } = await req.json();
+    const { id, status, key } = await req.json() as any;
 
     if (key !== 'HUSKY2006') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { env } = getRequestContext() as any;
-    const db = env.DB;
+    const { env } = await getCloudflareContext({ async: true });
+    const db = env.DB as any;
 
     await db.prepare(
       "UPDATE photos SET status = ? WHERE id = ?"

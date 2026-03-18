@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export const runtime = 'edge';
 
 export async function GET() {
   try {
-    const { env } = getRequestContext() as any;
-    const db = env.DB;
+    const { env } = await getCloudflareContext({ async: true });
+    const db = env.DB as any;
 
     const { results } = await db.prepare(
       "SELECT * FROM photos WHERE status = 'approved' ORDER BY created_at DESC"
@@ -21,9 +21,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { env } = getRequestContext() as any;
-    const db = env.DB;
-    const bucket = env.BUCKET;
+    const { env } = await getCloudflareContext({ async: true });
+    const db = env.DB as any;
+    const bucket = env.BUCKET as any;
 
     if (!bucket) {
       return NextResponse.json({ error: 'R2 Bucket not configured' }, { status: 500 });

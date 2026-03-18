@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 export const runtime = 'edge';
 
@@ -8,8 +8,8 @@ export async function GET(
   { params }: { params: { filename: string } }
 ) {
   try {
-    const { env } = getRequestContext() as any;
-    const bucket = env.BUCKET;
+    const { env } = await getCloudflareContext({ async: true });
+    const bucket = env.BUCKET as any;
 
     if (!bucket) {
       return NextResponse.json({ error: 'R2 Bucket not configured' }, { status: 500 });
