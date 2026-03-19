@@ -63,7 +63,13 @@ export default function PhotoAlbum() {
         if (res.ok) {
           successCount++;
         } else {
-          const errorData = await res.json().catch(() => ({}));
+          const errorText = await res.text();
+          let errorData;
+          try {
+            errorData = JSON.parse(errorText);
+          } catch (e) {
+            errorData = { error: errorText };
+          }
           console.error(`Upload failed for file ${file.name}:`, errorData);
           failCount++;
         }
