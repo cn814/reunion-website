@@ -130,7 +130,7 @@ export default function RSVPForm() {
 
                 {!selectedEntry && (
                     <div>
-                        <label className="block text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Maiden Name (if applicable)</label>
+                        <label className="block text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Preferred Name Today (if different)</label>
                         <input
                             type="text"
                             className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-husky-light-blue"
@@ -143,7 +143,7 @@ export default function RSVPForm() {
 
             {selectedEntry && (
                 <div>
-                    <label className="block text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Maiden Name (if applicable)</label>
+                    <label className="block text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Preferred Name Today (if different)</label>
                     <input
                         type="text"
                         className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-husky-light-blue"
