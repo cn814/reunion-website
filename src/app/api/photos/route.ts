@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       httpMetadata: { contentType: file.type }
     });
 
-    const url = `/api/photos/${filename}`;
+    const url = `https://pub-615a7ab081634ff89d67092401b432b0.r2.dev/${filename}`;
 
     await db.prepare(
       "INSERT INTO photos (url, caption, uploaded_by, status) VALUES (?, ?, ?, 'pending')"

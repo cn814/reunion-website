@@ -88,6 +88,16 @@
     document.getElementById('err-msg').textContent = '';
   });
 
+  const R2_PUBLIC = 'https://pub-615a7ab081634ff89d67092401b432b0.r2.dev';
+
+  function photoUrl(url) {
+    // rewrite legacy /api/photos/filename to direct R2 URL
+    if (url && url.startsWith('/api/photos/')) {
+      return R2_PUBLIC + '/' + url.replace('/api/photos/', '');
+    }
+    return url;
+  }
+
   async function loadPhotos() {
     document.getElementById('pending-grid').innerHTML = '<div id="loading">Loading photos...</div>';
     try {
@@ -136,7 +146,7 @@
     } else {
       pg.innerHTML = pending.map(p => `
         <div class="card">
-          <img data-src="${p.url}" alt="Pending" class="lazy-img" />
+          <img data-src="${photoUrl(p.url)}" alt="Pending" class="lazy-img" />
           <div class="card-body">
             <p>${p.caption || 'No caption'}</p>
             <div class="btn-row">
@@ -153,7 +163,7 @@
     } else {
       ag.innerHTML = approved.map(p => `
         <div class="thumb">
-          <img data-src="${p.url}" alt="Approved" class="lazy-img" />
+          <img data-src="${photoUrl(p.url)}" alt="Approved" class="lazy-img" />
           <button onclick="updateStatus(${p.id}, 'rejected')" title="Un-approve">✕</button>
         </div>`).join('');
     }
