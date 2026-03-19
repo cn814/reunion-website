@@ -78,9 +78,10 @@ export default function YearbookSection() {
   useEffect(() => {
     fetch('/api/attendees')
       .then(r => r.json())
-      .then((data: { name: string; attending: string }[]) => {
+      .then((data: unknown) => {
+        const entries = data as { name: string; attending: string }[];
         const map: Record<string, string> = {};
-        for (const entry of data) {
+        for (const entry of entries) {
           // Keep the most recent entry per name (API returns DESC order)
           if (!map[entry.name]) map[entry.name] = entry.attending;
         }
