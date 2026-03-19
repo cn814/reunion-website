@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PhotoBackground from './PhotoBackground';
 
 const yearbookPhotos = [
@@ -18,6 +18,7 @@ const yearbookPhotos = [
   'Brittany Hebenthal',
   'Brittney Bart',
   'Brock Lauer',
+  'Bryce Kupchella',
   'Chelsey Sheehan',
   'Christopher James',
   'Christopher Nealen',
@@ -72,6 +73,21 @@ const yearbookPhotos = [
 
 export default function YearbookSection() {
   const [selected, setSelected] = useState<string | null>(null);
+  const [rsvpStatus, setRsvpStatus] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch('/api/attendees')
+      .then(r => r.json())
+      .then((data: { name: string; attending: string }[]) => {
+        const map: Record<string, string> = {};
+        for (const entry of data) {
+          // Keep the most recent entry per name (API returns DESC order)
+          if (!map[entry.name]) map[entry.name] = entry.attending;
+        }
+        setRsvpStatus(map);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section id="yearbook" className="py-24 bg-husky-charcoal relative overflow-hidden">
@@ -88,23 +104,32 @@ export default function YearbookSection() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-          {yearbookPhotos.map((name) => (
-            <button
-              key={name}
-              onClick={() => setSelected(name)}
-              className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-900 border border-white/5 hover:border-husky-blue/50 transition-all hover:scale-[1.03] shadow-md hover:shadow-husky-blue/20 hover:shadow-lg"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`/photos/yearbook-photos/${encodeURIComponent(name)}.jpg`}
-                alt={name}
-                className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 pt-8 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-                <p className="text-white text-xs font-bold leading-tight">{name}</p>
-              </div>
-            </button>
-          ))}
+          {yearbookPhotos.map((name) => {
+            const status = rsvpStatus[name];
+            return (
+              <button
+                key={name}
+                onClick={() => setSelected(name)}
+                className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-900 border border-white/5 hover:border-husky-blue/50 transition-all hover:scale-[1.03] shadow-md hover:shadow-husky-blue/20 hover:shadow-lg"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/photos/yearbook-photos/${encodeURIComponent(name)}.jpg`}
+                  alt={name}
+                  className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
+                />
+                {/* RSVP badge */}
+                {status && (
+                  <div className={`absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shadow-lg ${status === 'no' ? 'bg-red-500' : 'bg-green-500'}`}>
+                    {status === 'no' ? '✕' : '✓'}
+                  </div>
+                )}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 pt-8 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+                  <p className="text-white text-xs font-bold leading-tight">{name}</p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -132,6 +157,11 @@ export default function YearbookSection() {
             />
             <p className="text-center text-white font-bold text-xl mt-4">{selected}</p>
             <p className="text-center text-zinc-500 text-sm mt-1">Bishop Carroll Class of 2006</p>
+            {rsvpStatus[selected] && (
+              <p className={`text-center text-sm font-bold mt-2 ${rsvpStatus[selected] === 'no' ? 'text-red-400' : 'text-green-400'}`}>
+                {rsvpStatus[selected] === 'yes' ? '✓ Attending' : rsvpStatus[selected] === 'maybe' ? '✓ Maybe attending' : '✕ Not attending'}
+              </p>
+            )}
 
             {/* Prev / Next */}
             <div className="flex justify-between mt-4">
