@@ -1,5 +1,9 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(npm show:*)",
+      "Bash(npm install:*)"
+    ],
     "additionalDirectories": [
       "c:\\Users\\cneal\\.gemini\\antigravity\\scratch\\class-reunion-site\\public\\photos\\yearbook-photos"
     ]
