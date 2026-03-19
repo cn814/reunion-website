@@ -20,6 +20,7 @@ interface RSVP {
   guest_name: string;
   email: string;
   dietary: string;
+  suggestions: string;
   created_at: string;
   yearbook_photo: string | null;
 }
@@ -333,11 +334,12 @@ function AdminContent() {
                   <tr>
                     <th className="text-left px-4 py-3">Photo</th>
                     <th className="text-left px-4 py-3">Name</th>
-                    <th className="text-left px-4 py-3">Maiden Name</th>
+                    <th className="text-left px-4 py-3">Preferred Name</th>
                     <th className="text-left px-4 py-3">Email</th>
                     <th className="text-left px-4 py-3">Attending</th>
                     <th className="text-left px-4 py-3">Guest</th>
                     <th className="text-left px-4 py-3">Dietary</th>
+                    <th className="text-left px-4 py-3">Suggestions</th>
                     <th className="text-left px-4 py-3">Submitted</th>
                   </tr>
                 </thead>
@@ -366,6 +368,7 @@ function AdminContent() {
                       </td>
                       <td className="px-4 py-3 text-zinc-400">{r.guest_name || '—'}</td>
                       <td className="px-4 py-3 text-zinc-400">{r.dietary || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-400 max-w-xs truncate" title={r.suggestions || ''}>{r.suggestions || '—'}</td>
                       <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(r.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}

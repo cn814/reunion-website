@@ -82,6 +82,7 @@ export default function RSVPForm() {
                     <p className="text-4xl mb-3">🎓</p>
                     <h3 className="text-2xl font-black mb-2">You're on the list, {formData.name}!</h3>
                     <p className="text-zinc-400">We can't wait to see you. Check back here for more details.</p>
+                    <p className="text-zinc-600 text-sm mt-2">Need to make a change? Just submit the form again.</p>
                 </div>
             </div>
         );

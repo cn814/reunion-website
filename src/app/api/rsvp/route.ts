@@ -17,7 +17,16 @@ export async function POST(req: NextRequest) {
     }
 
     await db.prepare(
-      'INSERT INTO rsvps (name, maiden_name, attending, guest_name, email, dietary, suggestions) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      `INSERT INTO rsvps (name, maiden_name, attending, guest_name, email, dietary, suggestions)
+       VALUES (?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(name) DO UPDATE SET
+         maiden_name = excluded.maiden_name,
+         attending = excluded.attending,
+         guest_name = excluded.guest_name,
+         email = excluded.email,
+         dietary = excluded.dietary,
+         suggestions = excluded.suggestions,
+         created_at = CURRENT_TIMESTAMP`
     ).bind(name, maiden_name || '', attending, guest_name || '', email, dietary || '', suggestions || '').run();
 
     return NextResponse.json({ success: true });
@@ -39,13 +48,16 @@ export async function GET(req: NextRequest) {
     const db = (env as any).DB;
 
     const { results } = await db.prepare(
-      `SELECT r.*, y.photo_url as yearbook_photo
-       FROM rsvps r
-       LEFT JOIN yearbook_photos y ON LOWER(r.name) = LOWER(y.name)
-       ORDER BY r.created_at DESC LIMIT 200`
+      `SELECT * FROM rsvps ORDER BY created_at DESC LIMIT 200`
     ).all();
 
-    return NextResponse.json(results);
+    // Derive yearbook photo URL from name (static files)
+    const enriched = (results || []).map((r: any) => ({
+      ...r,
+      yearbook_photo: `/photos/yearbook-photos/${encodeURIComponent(r.name)}.jpg`,
+    }));
+
+    return NextResponse.json(enriched);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
