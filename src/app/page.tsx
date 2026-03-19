@@ -2,7 +2,7 @@ import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import RSVPForm from "@/components/RSVPForm";
 import GraduationVideo from "@/components/GraduationVideo";
-import Image from "next/image";
+
 import PhotoAlbum from "@/components/PhotoAlbum";
 import NostalgiaSection from "@/components/NostalgiaSection";
 import Navbar from "@/components/Navbar";
@@ -66,11 +66,11 @@ export default function Home() {
           <div className="flex justify-center opacity-80 grayscale hover:grayscale-0 transition-all duration-700">
             <a href="https://askew-houser.com/tribute/details/517" target="_blank" rel="noopener noreferrer" className="text-center group block max-w-sm">
               <div className="aspect-square glass rounded-full mb-6 mx-auto border-white/5 w-48 h-48 overflow-hidden bg-zinc-900 group-hover:bg-zinc-800 transition-colors shadow-xl relative">
-                <Image 
-                  src="/photos/bryce.jpg" 
-                  alt="Bryce J. Kupchella" 
-                  fill 
-                  className="object-cover"
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/photos/bryce.jpg"
+                  alt="Bryce J. Kupchella"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <p className="text-xl font-bold text-zinc-300 group-hover:text-white transition-colors">Bryce J. Kupchella</p>
