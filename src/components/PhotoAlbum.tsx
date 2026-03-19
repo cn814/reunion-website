@@ -17,6 +17,7 @@ export default function PhotoAlbum() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
@@ -42,14 +43,16 @@ export default function PhotoAlbum() {
     }
 
     setUploading(true);
+    setUploadProgress(0);
     let successCount = 0;
     let failCount = 0;
 
-    for (const file of files) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('caption', ''); // Users don't need captions anymore
-      formData.append('uploaded_by', 'Anonymous'); // Defaulting since name is removed
+      formData.append('caption', ''); 
+      formData.append('uploaded_by', 'Anonymous'); 
 
       try {
         const res = await fetch('/api/photos', {
@@ -60,11 +63,15 @@ export default function PhotoAlbum() {
         if (res.ok) {
           successCount++;
         } else {
+          const errorData = await res.json().catch(() => ({}));
+          console.error(`Upload failed for file ${file.name}:`, errorData);
           failCount++;
         }
       } catch (err) {
+        console.error(`Error uploading file ${file.name}:`, err);
         failCount++;
       }
+      setUploadProgress(Math.round(((i + 1) / files.length) * 100));
     }
 
     if (successCount > 0) {
@@ -144,6 +151,24 @@ export default function PhotoAlbum() {
                 </p>
                 {files.length === 0 && <p className="text-xs text-zinc-500 mt-1">JPG or PNG (Max 5MB each)</p>}
               </label>
+
+              {uploading && (
+                <div className="space-y-2 py-4">
+                  <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-zinc-500">
+                    <span>Uploading...</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                    <div 
+                      className="h-full bg-husky-blue transition-all duration-300 ease-out shadow-[0_0_10px_rgba(0,140,255,0.5)]"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                  <p className="text-center text-[10px] text-zinc-500 italic">
+                    Processing {Math.ceil((uploadProgress / 100) * files.length)} of {files.length}
+                  </p>
+                </div>
+              )}
 
               <button 
                 onClick={handleUpload}

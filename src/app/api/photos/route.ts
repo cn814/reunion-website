@@ -5,34 +5,40 @@ export const runtime = 'edge';
 
 export async function GET() {
   try {
-    const { env } = await getCloudflareContext({ async: true });
-    const db = env.DB as any;
+    const context = await getCloudflareContext({ async: true });
+    const env = (context as any)?.env;
+    const db = env?.DB;
+
+    if (!db) {
+      return new Response('Database binding (DB) is missing. Check Cloudflare Pages/Workers configuration.', { status: 500 });
+    }
 
     const { results } = await db.prepare(
       "SELECT * FROM photos WHERE status = 'approved' ORDER BY created_at DESC"
     ).all();
 
-    return NextResponse.json(results);
-  } catch (error) {
+    return NextResponse.json(results || []);
+  } catch (error: any) {
     console.error('Error fetching photos:', error);
-    return NextResponse.json({ error: 'Failed to fetch photos' }, { status: 500 });
+    return new Response(`API Error (GET): ${error.message || 'Unknown'}`, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { env } = await getCloudflareContext({ async: true });
-    const db = env.DB as any;
-    const bucket = env.BUCKET as any;
+    const context = await getCloudflareContext({ async: true });
+    const env = (context as any)?.env;
+    const db = env?.DB;
+    const bucket = env?.BUCKET;
 
-    if (!bucket) {
-      return NextResponse.json({ error: 'R2 Bucket not configured' }, { status: 500 });
+    if (!db || !bucket) {
+      return new Response(`Bindings missing: DB=${!!db}, BUCKET=${!!bucket}`, { status: 500 });
     }
 
     const formData = await req.formData();
     const file = formData.get('file') as File;
-    const caption = formData.get('caption') as string;
-    const uploadedBy = formData.get('uploaded_by') as string;
+    const caption = (formData.get('caption') as string) || '';
+    const uploadedBy = (formData.get('uploaded_by') as string) || 'Anonymous';
 
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
@@ -50,8 +56,8 @@ export async function POST(req: NextRequest) {
     ).bind(url, caption, uploadedBy).run();
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error uploading photo:', error);
-    return NextResponse.json({ error: 'Failed to upload photo' }, { status: 500 });
+    return new Response(`API Error (POST): ${error.message || 'Unknown'}`, { status: 500 });
   }
 }
