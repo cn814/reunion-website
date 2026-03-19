@@ -39,7 +39,10 @@ export async function GET(req: NextRequest) {
     const db = (env as any).DB;
 
     const { results } = await db.prepare(
-      'SELECT * FROM rsvps ORDER BY created_at DESC LIMIT 200'
+      `SELECT r.*, y.photo_url as yearbook_photo
+       FROM rsvps r
+       LEFT JOIN yearbook_photos y ON LOWER(r.name) = LOWER(y.name)
+       ORDER BY r.created_at DESC LIMIT 200`
     ).all();
 
     return NextResponse.json(results);
