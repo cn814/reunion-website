@@ -79,9 +79,18 @@ export default function RSVPForm() {
                     </div>
                 )}
                 <div>
-                    <p className="text-4xl mb-3">🎓</p>
-                    <h3 className="text-2xl font-black mb-2">You're on the list, {formData.name}!</h3>
-                    <p className="text-zinc-400">We can't wait to see you. Check back here for more details.</p>
+                    <p className="text-4xl mb-3">{formData.attending === "no" ? "😢" : "🎓"}</p>
+                    {formData.attending === "no" ? (
+                        <>
+                            <h3 className="text-2xl font-black mb-2">Sorry you can't make it, {formData.name}!</h3>
+                            <p className="text-zinc-400">We'll miss you. Come back and update your RSVP if anything changes.</p>
+                        </>
+                    ) : (
+                        <>
+                            <h3 className="text-2xl font-black mb-2">You're on the list, {formData.name}!</h3>
+                            <p className="text-zinc-400">We can't wait to see you. Check back here for more details.</p>
+                        </>
+                    )}
                     <p className="text-zinc-600 text-sm mt-2">Need to make a change? Just submit the form again.</p>
                 </div>
             </div>
