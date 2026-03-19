@@ -17,9 +17,7 @@ export default function PhotoAlbum() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [caption, setCaption] = useState('');
-  const [name, setName] = useState('');
+  const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
     fetchPhotos();
@@ -38,38 +36,48 @@ export default function PhotoAlbum() {
   };
 
   const handleUpload = async () => {
-    if (!file || !name) {
-      alert('Please select a file and enter your name.');
+    if (files.length === 0) {
+      alert('Please select at least one photo.');
       return;
     }
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('caption', caption);
-    formData.append('uploaded_by', name);
+    let successCount = 0;
+    let failCount = 0;
 
-    try {
-      const res = await fetch('/api/photos', {
-        method: 'POST',
-        body: formData,
-      });
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('caption', ''); // Users don't need captions anymore
+      formData.append('uploaded_by', 'Anonymous'); // Defaulting since name is removed
 
-      if (res.ok) {
-        alert('Photo uploaded successfully! It will appear once approved.');
-        setIsModalOpen(false);
-        setFile(null);
-        setCaption('');
-        setName('');
-      } else {
-        const error = await res.json() as any;
-        alert(`Upload failed: ${error.error || 'Unknown error'}`);
+      try {
+        const res = await fetch('/api/photos', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (res.ok) {
+          successCount++;
+        } else {
+          failCount++;
+        }
+      } catch (err) {
+        failCount++;
       }
-    } catch (err) {
-      alert('Upload failed. Please check your connection.');
-    } finally {
-      setUploading(false);
     }
+
+    if (successCount > 0) {
+      alert(`${successCount} photo${successCount > 1 ? 's' : ''} uploaded successfully! They will appear once approved.`);
+      setIsModalOpen(false);
+      setFiles([]);
+    }
+
+    if (failCount > 0) {
+      alert(`${failCount} upload${failCount > 1 ? 's' : ''} failed. Please try again.`);
+    }
+
+    setUploading(false);
   };
 
   return (
@@ -122,38 +130,24 @@ export default function PhotoAlbum() {
             </p>
             
             <div className="space-y-4">
-              <label className={`block p-8 border-2 border-dashed ${file ? 'border-husky-light-blue bg-husky-blue/10' : 'border-white/20 bg-white/5'} rounded-2xl text-center hover:border-husky-light-blue transition-all cursor-pointer group`}>
+              <label className={`block p-8 border-2 border-dashed ${files.length > 0 ? 'border-husky-light-blue bg-husky-blue/10' : 'border-white/20 bg-white/5'} rounded-2xl text-center hover:border-husky-light-blue transition-all cursor-pointer group`}>
                 <input 
                   type="file" 
                   accept="image/*" 
                   className="hidden" 
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  multiple
+                  onChange={(e) => setFiles(Array.from(e.target.files || []))}
                 />
-                <Upload size={32} className={`mx-auto mb-2 ${file ? 'text-husky-light-blue' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
+                <Upload size={32} className={`mx-auto mb-2 ${files.length > 0 ? 'text-husky-light-blue' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
                 <p className="text-sm font-bold text-zinc-300">
-                  {file ? file.name : 'Choose a file'}
+                  {files.length > 0 ? `${files.length} file${files.length > 1 ? 's' : ''} selected` : 'Choose photos'}
                 </p>
-                {!file && <p className="text-xs text-zinc-500 mt-1">JPG or PNG (Max 5MB)</p>}
+                {files.length === 0 && <p className="text-xs text-zinc-500 mt-1">JPG or PNG (Max 5MB each)</p>}
               </label>
 
-              <input 
-                type="text" 
-                placeholder="What's happening in this photo?" 
-                value={caption}
-                onChange={(e) => setCaption(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-husky-light-blue transition-colors" 
-              />
-              <input 
-                type="text" 
-                placeholder="Your Name" 
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-husky-light-blue transition-colors" 
-              />
-              
               <button 
                 onClick={handleUpload}
-                disabled={uploading}
+                disabled={uploading || files.length === 0}
                 className={`w-full py-4 ${uploading ? 'bg-zinc-800 cursor-not-allowed' : 'bg-husky-blue hover:bg-husky-light-blue'} text-white font-black rounded-xl transition-all shadow-lg flex items-center justify-center gap-2`}
               >
                 {uploading ? (
