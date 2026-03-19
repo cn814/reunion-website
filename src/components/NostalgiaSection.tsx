@@ -1,7 +1,7 @@
 'use client';
 
 
-import Image from 'next/image';
+
 
 const stats = [
   { label: 'A Gallon of Gas', value: '$3.03', icon: '⛽' },

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+
 
 
 interface Photo {
@@ -215,12 +215,11 @@ function Slideshow({ photos }: { photos: Photo[] }) {
           key={photo.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
-          <Image 
-            src={photo.url} 
-            alt={photo.caption || 'Class Memory'} 
-            fill 
-            className="object-cover"
-            unoptimized
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photo.url}
+            alt={photo.caption || 'Class Memory'}
+            className="w-full h-full object-cover absolute inset-0"
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
             <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
