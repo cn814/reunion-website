@@ -91,8 +91,8 @@ function AdminContent() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {pending.map(photo => (
                 <div key={photo.id} className="glass rounded-2xl overflow-hidden border-white/10">
-                  <div className="relative aspect-video bg-zinc-900">
-                    <Image src={photo.url} alt="Pending" fill className="object-contain" unoptimized />
+                  <div className="relative h-64 bg-zinc-900 rounded-t-2xl overflow-hidden">
+                    <Image src={photo.url} alt="Pending" fill className="object-cover" unoptimized />
                   </div>
                   <div className="p-6">
                     <p className="font-bold mb-6">{photo.caption || 'No caption'}</p>
