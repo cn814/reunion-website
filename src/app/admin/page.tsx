@@ -92,7 +92,7 @@ function AdminContent() {
               {pending.map(photo => (
                 <div key={photo.id} className="glass rounded-2xl overflow-hidden border-white/10">
                   <div className="relative aspect-video bg-zinc-900">
-                    <Image src={photo.url} alt="Pending" fill className="object-contain" />
+                    <Image src={photo.url} alt="Pending" fill className="object-contain" unoptimized />
                   </div>
                   <div className="p-6">
                     <p className="font-bold mb-1">{photo.caption || 'No caption'}</p>
@@ -123,7 +123,7 @@ function AdminContent() {
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
             {approved.map(photo => (
               <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden group">
-                <Image src={photo.url} alt="Approved" fill className="object-cover grayscale hover:grayscale-0 transition-all" />
+                <Image src={photo.url} alt="Approved" fill className="object-cover grayscale hover:grayscale-0 transition-all" unoptimized />
                 <button 
                   onClick={() => updateStatus(photo.id, 'rejected')}
                   className="absolute top-2 right-2 bg-red-600 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"

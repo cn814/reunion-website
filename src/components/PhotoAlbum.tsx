@@ -220,6 +220,7 @@ function Slideshow({ photos }: { photos: Photo[] }) {
             alt={photo.caption || 'Class Memory'} 
             fill 
             className="object-cover"
+            unoptimized
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
             <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
