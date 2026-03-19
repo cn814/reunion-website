@@ -32,7 +32,7 @@ export default function PhotoBackground() {
   const backgroundPhotos = [...photos, ...photos, ...photos].slice(0, 12);
 
   return (
-    <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none grid grid-cols-2 md:grid-cols-4 gap-4 p-4 grayscale overflow-hidden">
+    <div className="absolute inset-0 z-0 opacity-[0.12] pointer-events-none grid grid-cols-2 md:grid-cols-4 gap-4 p-4 grayscale overflow-hidden">
       {backgroundPhotos.map((photo, i) => (
         <div 
           key={`${photo.id}-${i}`} 
