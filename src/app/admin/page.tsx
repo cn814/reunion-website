@@ -20,8 +20,10 @@ function AdminContent() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (key === 'HUSKY2006') {
       setAuthorized(true);
       fetchPhotos();
@@ -58,6 +60,8 @@ function AdminContent() {
       console.error('Failed to update status', err);
     }
   };
+
+  if (!isMounted) return null;
 
   if (loading) {
     return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading Dashboard...</div>;
