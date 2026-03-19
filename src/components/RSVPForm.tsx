@@ -27,7 +27,7 @@ export default function RSVPForm() {
     useEffect(() => {
         fetch('/api/yearbook')
             .then(r => r.json())
-            .then((data: YearbookEntry[]) => setYearbook(data))
+            .then((data: unknown) => setYearbook(data as YearbookEntry[]))
             .catch(() => {})
             .finally(() => setYearbookLoading(false));
     }, []);
