@@ -10,7 +10,10 @@ export async function GET() {
     const db = env?.DB;
 
     if (!db) {
-      return new Response('Database binding (DB) is missing. Check Cloudflare Pages/Workers configuration.', { status: 500 });
+      return NextResponse.json({ 
+        error: 'Database binding (DB) is missing.', 
+        suggestion: 'Go to your Cloudflare Pages dashboard > Settings > Functions > D1 Database Bindings and add a binding named "DB" to your "reunion-db" database.'
+      }, { status: 500 });
     }
 
     const { results } = await db.prepare(
@@ -20,7 +23,7 @@ export async function GET() {
     return NextResponse.json(results || []);
   } catch (error: any) {
     console.error('Error fetching photos:', error);
-    return new Response(`API Error (GET): ${error.message || 'Unknown'}`, { status: 500 });
+    return NextResponse.json({ error: `API Error (GET): ${error.message || 'Unknown'}` }, { status: 500 });
   }
 }
 
@@ -32,7 +35,11 @@ export async function POST(req: NextRequest) {
     const bucket = env?.BUCKET;
 
     if (!db || !bucket) {
-      return new Response(`Bindings missing: DB=${!!db}, BUCKET=${!!bucket}`, { status: 500 });
+      return NextResponse.json({ 
+        error: 'Cloudflare bindings are missing.',
+        details: `DB: ${!!db}, BUCKET: ${!!bucket}`,
+        suggestion: 'Ensure D1 and R2 bindings are configured in your Cloudflare dashboard with names "DB" and "BUCKET".'
+      }, { status: 500 });
     }
 
     const formData = await req.formData();
@@ -58,6 +65,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('Error uploading photo:', error);
-    return new Response(`API Error (POST): ${error.message || 'Unknown'}`, { status: 500 });
+    return NextResponse.json({ error: `API Error (POST): ${error.message || 'Unknown'}` }, { status: 500 });
   }
 }
