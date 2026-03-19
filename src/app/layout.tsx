@@ -17,8 +17,6 @@ export const metadata: Metadata = {
   description: "Bishop Carroll Class of 2006 Reunion Website",
 };
 
-import PasswordProtection from "@/components/PasswordProtection";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,9 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PasswordProtection>
-          {children}
-        </PasswordProtection>
+        {children}
       </body>
     </html>
   );

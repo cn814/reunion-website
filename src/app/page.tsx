@@ -7,10 +7,12 @@ import PhotoAlbum from "@/components/PhotoAlbum";
 import NostalgiaSection from "@/components/NostalgiaSection";
 import Navbar from "@/components/Navbar";
 import PhotoBackground from "@/components/PhotoBackground";
+import PasswordProtection from "@/components/PasswordProtection";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-husky-black">
+    <PasswordProtection>
+      <main className="min-h-screen bg-husky-black">
       <Navbar />
       <Hero />
       <GraduationVideo />
@@ -127,5 +129,6 @@ export default function Home() {
         <p>© 2026 Bishop Carroll Class of 2006. Built with nostalgia and Husky Pride.</p>
       </footer>
     </main>
+    </PasswordProtection>
   );
 }
