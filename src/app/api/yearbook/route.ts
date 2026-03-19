@@ -15,7 +15,6 @@ const YEARBOOK_NAMES = [
   'Brittany Hebenthal',
   'Brittney Bart',
   'Brock Lauer',
-  'Bryce Kupchella',
   'Chelsey Sheehan',
   'Christopher James',
   'Christopher Nealen',
