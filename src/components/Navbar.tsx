@@ -6,7 +6,8 @@ const navItems = [
   { name: 'RSVP', href: '#rsvp' },
   { name: 'Payment', href: '#payments' },
   { name: 'Memorial', href: '#memorial' },
-  { name: 'Photos', href: '#album' },
+  { name: 'Photos', href: '#photos' },
+  { name: 'Yearbook', href: '#yearbook' },
   { name: 'Time Capsule', href: '#nostalgia' },
   { name: 'Details', href: '#details' },
 ];

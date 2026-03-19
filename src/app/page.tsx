@@ -4,6 +4,7 @@ import RSVPForm from "@/components/RSVPForm";
 import GraduationVideo from "@/components/GraduationVideo";
 
 import PhotoAlbum from "@/components/PhotoAlbum";
+import YearbookSection from "@/components/YearbookSection";
 import NostalgiaSection from "@/components/NostalgiaSection";
 import Navbar from "@/components/Navbar";
 import PhotoBackground from "@/components/PhotoBackground";
@@ -84,6 +85,9 @@ export default function Home() {
 
       {/* Photo Album Section */}
       <PhotoAlbum />
+
+      {/* Yearbook Section */}
+      <YearbookSection />
 
       {/* Details Section */}
       <section id="details" className="py-24 bg-husky-charcoal relative overflow-hidden">
