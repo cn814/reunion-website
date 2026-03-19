@@ -12,10 +12,35 @@ export default function RSVPForm() {
         email: "",
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [submitting, setSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form Submitted:", formData);
-        alert("Thanks for RSVPing! We'll be in touch.");
+        setSubmitting(true);
+        try {
+            const res = await fetch('/api/rsvp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    maiden_name: formData.maidenName,
+                    attending: formData.attending,
+                    guest_name: formData.guestName,
+                    email: formData.email,
+                    dietary: formData.dietary,
+                }),
+            });
+            if (res.ok) {
+                setSubmitted(true);
+            } else {
+                alert('Something went wrong. Please try again.');
+            }
+        } catch {
+            alert('Network error. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
