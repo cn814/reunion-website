@@ -18,6 +18,7 @@ export default function RSVPForm() {
         guestName: "",
         dietary: "",
         email: "",
+        suggestions: "",
     });
 
     const [submitting, setSubmitting] = useState(false);
@@ -48,6 +49,7 @@ export default function RSVPForm() {
                     guest_name: formData.guestName,
                     email: formData.email,
                     dietary: formData.dietary,
+                    suggestions: formData.suggestions,
                 }),
             });
             if (res.ok) {
@@ -79,7 +81,7 @@ export default function RSVPForm() {
                 <div>
                     <p className="text-4xl mb-3">🎓</p>
                     <h3 className="text-2xl font-black mb-2">You're on the list, {formData.name}!</h3>
-                    <p className="text-zinc-400">We can't wait to see you. Check your email for details.</p>
+                    <p className="text-zinc-400">We can't wait to see you. Check back here for more details.</p>
                 </div>
             </div>
         );
@@ -194,6 +196,16 @@ export default function RSVPForm() {
                     value={formData.dietary}
                     onChange={(e) => setFormData({ ...formData, dietary: e.target.value })}
                     placeholder="Gluten-free, vegan, allergies, etc."
+                />
+            </div>
+
+            <div>
+                <label className="block text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Suggestions & Ideas</label>
+                <textarea
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-husky-light-blue h-28"
+                    value={formData.suggestions}
+                    onChange={(e) => setFormData({ ...formData, suggestions: e.target.value })}
+                    placeholder="Music requests, activities, anything you'd love to see at the reunion..."
                 />
             </div>
 

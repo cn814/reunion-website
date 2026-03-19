@@ -10,15 +10,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Database binding missing' }, { status: 500 });
     }
 
-    const { name, maiden_name, attending, guest_name, email, dietary } = await req.json() as any;
+    const { name, maiden_name, attending, guest_name, email, dietary, suggestions } = await req.json() as any;
 
     if (!name || !email || !attending) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     await db.prepare(
-      'INSERT INTO rsvps (name, maiden_name, attending, guest_name, email, dietary) VALUES (?, ?, ?, ?, ?, ?)'
-    ).bind(name, maiden_name || '', attending, guest_name || '', email, dietary || '').run();
+      'INSERT INTO rsvps (name, maiden_name, attending, guest_name, email, dietary, suggestions) VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).bind(name, maiden_name || '', attending, guest_name || '', email, dietary || '', suggestions || '').run();
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
