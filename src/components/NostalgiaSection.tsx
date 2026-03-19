@@ -1,19 +1,19 @@
 'use client';
 
-import { Tag, Music, Film, Newspaper, Smartphone, Globe, Tv } from 'lucide-react';
+
 import Image from 'next/image';
 
 const stats = [
-  { label: 'A Gallon of Gas', value: '$3.03', icon: Tag },
-  { label: 'Movie Ticket', value: '$6.55', icon: Film },
-  { label: 'Gallon of Milk', value: '$3.23', icon: Tv },
-  { label: 'Avg. Income', value: '$37,900', icon: Tag },
+  { label: 'A Gallon of Gas', value: '$3.03', icon: '⛽' },
+  { label: 'Movie Ticket', value: '$6.55', icon: '🎬' },
+  { label: 'Gallon of Milk', value: '$3.23', icon: '🥛' },
+  { label: 'Avg. Income', value: '$37,900', icon: '💰' },
 ];
 
 const highlights = [
   {
     title: 'THE HEADLINES',
-    icon: Newspaper,
+    icon: '📰',
     image: '/photos/nostalgia/fb-vs-twtr.jpg',
     items: [
       'Pluto is officially demoted to a "Dwarf Planet"',
@@ -24,7 +24,7 @@ const highlights = [
   },
   {
     title: 'THE SOUNDTRACK',
-    icon: Music,
+    icon: '🎵',
     image: '/photos/nostalgia/SexyBack.png',
     items: [
       '"Bad Day" - Daniel Powter (Year-end #1)',
@@ -35,7 +35,7 @@ const highlights = [
   },
   {
     title: 'THE BIG SCREEN',
-    icon: Film,
+    icon: '🍿',
     image: '/photos/nostalgia/Pirates_of_the_caribbean_2_poster_b.jpg',
     items: [
       'Pirates of the Caribbean: Dead Man\'s Chest',
@@ -46,7 +46,7 @@ const highlights = [
   },
   {
     title: 'THE VIBE',
-    icon: Smartphone,
+    icon: '📱',
     image: '/photos/nostalgia/Wii-Console.png',
     items: [
       'The Motorola RAZR is the must-have phone',
@@ -98,7 +98,7 @@ export default function NostalgiaSection() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           {stats.map((stat, i) => (
             <div key={i} className="glass p-6 rounded-2xl border-white/5 text-center transition-transform hover:scale-105">
-              <stat.icon className="mx-auto mb-4 text-husky-light-blue opacity-50" size={20} />
+              <div className="text-3xl mb-4 opacity-50">{stat.icon}</div>
               <p className="text-zinc-500 text-xs uppercase font-bold tracking-widest mb-1">{stat.label}</p>
               <p className="text-2xl font-black text-white">{stat.value}</p>
             </div>
@@ -111,8 +111,8 @@ export default function NostalgiaSection() {
             <div key={i} className="glass p-8 rounded-3xl border-white/10 hover:border-husky-blue/30 transition-all group relative overflow-hidden">
               <div className="relative z-10">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 bg-husky-blue/20 rounded-xl text-husky-light-blue group-hover:scale-110 transition-transform">
-                    <card.icon size={24} />
+                  <div className="text-3xl bg-husky-blue/20 p-2 rounded-xl group-hover:scale-110 transition-transform">
+                    {card.icon}
                   </div>
                   <h4 className="text-xl font-black tracking-tight text-white">{card.title}</h4>
                 </div>
@@ -134,7 +134,7 @@ export default function NostalgiaSection() {
 
         <div className="mt-16 text-center">
             <p className="text-zinc-600 text-sm flex items-center justify-center gap-2">
-                <Globe size={14} /> Italy wins the FIFA World Cup (Germany 2006)
+                🌐 Italy wins the FIFA World Cup (Germany 2006)
             </p>
         </div>
       </div>

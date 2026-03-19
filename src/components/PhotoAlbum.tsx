@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Upload, X, ShieldCheck, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+
 
 interface Photo {
   id: number;
@@ -107,7 +107,7 @@ export default function PhotoAlbum() {
             onClick={() => setIsModalOpen(true)}
             className="mt-8 px-8 py-3 bg-husky-blue hover:bg-husky-light-blue text-white font-bold rounded-full transition-all flex items-center gap-2 mx-auto shadow-lg shadow-husky-blue/20"
           >
-            <Upload size={20} />
+            <span>📸</span>
             UPLOAD MEMORIES
           </button>
         </div>
@@ -135,7 +135,7 @@ export default function PhotoAlbum() {
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors"
             >
-              <X size={24} />
+              ✕
             </button>
             <h3 className="text-3xl font-black mb-2 text-white text-center tracking-tighter">UPLOAD PHOTO</h3>
             <p className="text-zinc-400 text-center mb-8 text-sm italic">
@@ -151,7 +151,7 @@ export default function PhotoAlbum() {
                   multiple
                   onChange={(e) => setFiles(Array.from(e.target.files || []))}
                 />
-                <Upload size={32} className={`mx-auto mb-2 ${files.length > 0 ? 'text-husky-light-blue' : 'text-zinc-500 group-hover:text-zinc-300'}`} />
+                <span className="text-4xl block mb-2">📤</span>
                 <p className="text-sm font-bold text-zinc-300">
                   {files.length > 0 ? `${files.length} file${files.length > 1 ? 's' : ''} selected` : 'Choose photos'}
                 </p>
@@ -233,13 +233,13 @@ function Slideshow({ photos }: { photos: Photo[] }) {
         onClick={prev}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-husky-blue/80 text-white transition-all opacity-0 group-hover/slide:opacity-100"
       >
-        <ChevronLeft size={24} />
+        ‹
       </button>
       <button 
         onClick={next}
         className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-husky-blue/80 text-white transition-all opacity-0 group-hover/slide:opacity-100"
       >
-        <ChevronRight size={24} />
+        ›
       </button>
 
       {/* Dots */}

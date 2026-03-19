@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowDown } from "lucide-react";
+
 
 export default function Hero() {
   return (
@@ -36,7 +36,7 @@ export default function Hero() {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-24 md:bottom-12 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer text-white/80 hover:text-white transition-colors drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">
-        <ArrowDown size={32} />
+        <span className="text-3xl block">↓</span>
       </div>
     </section>
   );

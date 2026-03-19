@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { Check, X, ShieldAlert } from 'lucide-react';
+
 
 interface Photo {
   id: number;
@@ -70,7 +70,7 @@ function AdminContent() {
   if (!authorized) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
-        <ShieldAlert size={64} className="text-red-500 mb-6" />
+        <span className="text-6xl mb-6">🚫</span>
         <h1 className="text-3xl font-bold mb-4">Unauthorized Access</h1>
         <p className="text-zinc-500">You must provide the correct admin key in the URL.</p>
       </div>
@@ -103,15 +103,15 @@ function AdminContent() {
                     <div className="flex gap-4">
                       <button 
                         onClick={() => updateStatus(photo.id, 'approved')}
-                        className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors"
+                        className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors uppercase"
                       >
-                        <Check size={18} /> APPROVE
+                        ✓ APPROVE
                       </button>
                       <button 
                         onClick={() => updateStatus(photo.id, 'rejected')}
-                        className="flex-1 py-3 bg-red-600 hover:bg-red-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors"
+                        className="flex-1 py-3 bg-red-600 hover:bg-red-500 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors uppercase"
                       >
-                        <X size={18} /> REJECT
+                        ✕ REJECT
                       </button>
                     </div>
                   </div>
@@ -131,7 +131,7 @@ function AdminContent() {
                   onClick={() => updateStatus(photo.id, 'rejected')}
                   className="absolute top-2 right-2 bg-red-600 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 >
-                  <X size={14} />
+                  ✕
                 </button>
               </div>
             ))}

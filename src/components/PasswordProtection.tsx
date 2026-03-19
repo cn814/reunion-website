@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Lock } from 'lucide-react';
+
 
 export default function PasswordProtection({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -36,7 +36,7 @@ export default function PasswordProtection({ children }: { children: React.React
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-husky-black p-4">
         <div className="glass w-full max-w-md p-10 rounded-3xl border-white/10 shadow-2xl text-center">
           <div className="w-16 h-16 bg-husky-blue/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Lock className="text-husky-light-blue" size={32} />
+            <span className="text-4xl">🔒</span>
           </div>
           <h2 className="text-3xl font-black text-white mb-2 uppercase tracking-tight">Husky Pride Only</h2>
           <p className="text-zinc-400 mb-8 italic">Enter our graduation year to view the reunion site.</p>
