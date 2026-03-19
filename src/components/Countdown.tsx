@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PhotoBackground from './PhotoBackground';
 
 export default function Countdown() {
     const targetDate = new Date("2026-09-26T18:00:00").getTime();
@@ -34,6 +35,7 @@ export default function Countdown() {
 
     return (
         <section className="py-16 bg-husky-black relative overflow-hidden">
+            <PhotoBackground />
             <div className="max-w-4xl mx-auto px-4 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
                     <div className="text-center md:text-left">

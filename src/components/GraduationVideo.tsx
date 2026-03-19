@@ -1,9 +1,12 @@
 "use client";
 
+import PhotoBackground from './PhotoBackground';
+
 export default function GraduationVideo() {
     return (
-        <section id="graduation-video" className="py-24 bg-zinc-950">
-            <div className="max-w-6xl mx-auto px-4 text-center">
+        <section id="graduation-video" className="py-24 bg-zinc-950 relative overflow-hidden">
+            <PhotoBackground />
+            <div className="max-w-6xl mx-auto px-4 text-center relative z-10">
                 <h2 className="text-4xl md:text-5xl font-black mb-6 uppercase tracking-tight">The Ceremony</h2>
                 <p className="text-xl text-zinc-400 mb-12 max-w-2xl mx-auto">
                     Relive the moment we officially became alumni. Watch the full 2006 Graduation Ceremony, direct from the archives.

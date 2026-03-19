@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import PhotoBackground from './PhotoBackground';
 
 
 
@@ -94,8 +95,9 @@ export default function PhotoAlbum() {
   };
 
   return (
-    <section id="photos" className="py-24 bg-husky-black">
-      <div className="max-w-6xl mx-auto px-4">
+    <section id="photos" className="py-24 bg-husky-black relative overflow-hidden">
+      <PhotoBackground />
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight text-gradient">Class Photo Album</h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import PhotoBackground from './PhotoBackground';
 
 const yearbookPhotos = [
   'Adam Petak',
@@ -73,8 +74,9 @@ export default function YearbookSection() {
   const [selected, setSelected] = useState<string | null>(null);
 
   return (
-    <section id="yearbook" className="py-24 bg-husky-charcoal">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="yearbook" className="py-24 bg-husky-charcoal relative overflow-hidden">
+      <PhotoBackground />
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-husky-light-blue font-bold tracking-[0.3em] uppercase mb-4">Class of 2006</h2>
           <h3 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
