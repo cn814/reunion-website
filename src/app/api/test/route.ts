@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
-
 export const runtime = 'edge';
 
 export async function GET() {
-  return NextResponse.json({ message: 'Hello from Edge' });
+  return new Response('{"message": "Strictly Zero Import Success"}', {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
