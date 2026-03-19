@@ -95,8 +95,7 @@ function AdminContent() {
                     <Image src={photo.url} alt="Pending" fill className="object-contain" unoptimized />
                   </div>
                   <div className="p-6">
-                    <p className="font-bold mb-1">{photo.caption || 'No caption'}</p>
-                    <p className="text-sm text-zinc-500 mb-6">By {photo.uploaded_by}</p>
+                    <p className="font-bold mb-6">{photo.caption || 'No caption'}</p>
                     <div className="flex gap-4">
                       <button 
                         onClick={() => updateStatus(photo.id, 'approved')}
