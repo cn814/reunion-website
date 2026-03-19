@@ -1,21 +1,76 @@
 import { NextResponse } from 'next/server';
-import { getCloudflareContext } from '@opennextjs/cloudflare';
+
+const YEARBOOK_NAMES = [
+  'Adam Petak',
+  'Allece Koehle',
+  'Amanda Seymore',
+  'Amie Simanski',
+  'Andrew Kordish',
+  'Andrew McConnell',
+  'Andrew Mullen',
+  'Anthony Lassak',
+  'Ashley Rake',
+  'Ashley Smithson',
+  'Brian Yuhas',
+  'Brittany Hebenthal',
+  'Brittney Bart',
+  'Brock Lauer',
+  'Chelsey Sheehan',
+  'Christopher James',
+  'Christopher Nealen',
+  'Cory Eckenrode',
+  'Daniel Link',
+  'David Bellvia',
+  'David Rose',
+  'David Tully',
+  'Dustin Hollern',
+  'Edward Roudybush',
+  'Elizabeth Hollen',
+  'Elyse Casher',
+  'Emily Drahnak',
+  'Grace Troxel',
+  'Jacqueline Heinlein',
+  'James Litzinger',
+  'Jarrett Polites',
+  'Jeffrey Minemyer',
+  'Jeffrey Moschgat',
+  'Jeremy Gorsuch',
+  'Jessica Byich',
+  'Joelle Knopp',
+  'John Swinconis',
+  'Joseph Klamar',
+  'Joseph Sutton',
+  'Joshua Beltowski',
+  'Julian Chimelewski',
+  'Julie Spinner',
+  'Kayla Ertter',
+  'Kelly Ostinosky',
+  'Kristina Repko',
+  'Lisa Mayansick',
+  'Luke Bender',
+  'Luke Jensen',
+  'Michael Morris',
+  'Mitchell Lemme',
+  'Nicholas McMahon',
+  'Nicole Panick',
+  'Nicole Paronish',
+  'Olivia Weinzierl',
+  'Patrick Hegemann',
+  'Paul Forcellini',
+  'Ryan Kline',
+  'Seth Nazzarak',
+  'Stephanie Bukowski',
+  'Stephanie Laino',
+  'Timothy Smith',
+  'Tyler Mouldry',
+  'Whitney Weber',
+  'Yolanda Gardner',
+];
 
 export async function GET() {
-  try {
-    const { env } = await getCloudflareContext({ async: true });
-    const db = (env as any).DB;
-
-    if (!db) {
-      return NextResponse.json({ error: 'Database binding missing' }, { status: 500 });
-    }
-
-    const { results } = await db.prepare(
-      'SELECT name, photo_url FROM yearbook_photos ORDER BY name ASC'
-    ).all();
-
-    return NextResponse.json(results || []);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  const entries = YEARBOOK_NAMES.map(name => ({
+    name,
+    photo_url: `/photos/yearbook-photos/${encodeURIComponent(name)}.jpg`,
+  }));
+  return NextResponse.json(entries);
 }
