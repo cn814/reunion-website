@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const db = env.DB as any;
 
     const { results } = await db.prepare(
-      "SELECT * FROM photos ORDER BY created_at DESC"
+      "SELECT * FROM photos ORDER BY created_at DESC LIMIT 50"
     ).all();
 
     return NextResponse.json(results);

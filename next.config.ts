@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    serverComponentsExternalPackages: ['lucide-react'],
+  },
 };
 
 export default nextConfig;
