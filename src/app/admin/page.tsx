@@ -3,8 +3,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-
-
 interface Photo {
   id: number;
   url: string;
@@ -14,10 +12,22 @@ interface Photo {
   created_at: string;
 }
 
+interface RSVP {
+  id: number;
+  name: string;
+  maiden_name: string;
+  attending: string;
+  guest_name: string;
+  email: string;
+  dietary: string;
+  created_at: string;
+}
+
 function AdminContent() {
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [rsvps, setRsvps] = useState<RSVP[]>([]);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -27,6 +37,7 @@ function AdminContent() {
     if (key === 'HUSKY2006') {
       setAuthorized(true);
       fetchPhotos();
+      fetchRsvps();
     } else {
       setLoading(false);
     }
@@ -44,6 +55,39 @@ function AdminContent() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchRsvps = async () => {
+    try {
+      const res = await fetch(`/api/rsvp?key=${key}`);
+      if (res.ok) {
+        const data = await res.json() as RSVP[];
+        setRsvps(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch RSVPs', err);
+    }
+  };
+
+  const exportCsv = () => {
+    const header = ['Name', 'Maiden Name', 'Email', 'Attending', 'Guest Name', 'Dietary', 'Submitted'];
+    const rows = rsvps.map(r => [
+      r.name,
+      r.maiden_name || '',
+      r.email,
+      r.attending,
+      r.guest_name || '',
+      r.dietary || '',
+      r.created_at,
+    ].map(v => `"${String(v).replace(/"/g, '""')}"`));
+    const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rsvps.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const updateStatus = async (id: number, status: string) => {
@@ -129,7 +173,7 @@ function AdminContent() {
               <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={photo.url} alt="Approved" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" />
-                <button 
+                <button
                   onClick={() => updateStatus(photo.id, 'rejected')}
                   className="absolute top-2 right-2 bg-red-600 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 >
@@ -138,6 +182,65 @@ function AdminContent() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="mt-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-zinc-400">
+              GUEST LIST ({rsvps.length} submitted)
+              <span className="ml-4 text-sm font-normal">
+                {rsvps.filter(r => r.attending === 'yes').length} attending &middot;&nbsp;
+                {rsvps.filter(r => r.attending === 'maybe').length} maybe &middot;&nbsp;
+                {rsvps.filter(r => r.attending === 'no').length} not coming
+              </span>
+            </h2>
+            <button
+              onClick={exportCsv}
+              className="px-4 py-2 bg-husky-blue hover:bg-husky-light-blue text-white text-sm font-bold rounded-xl transition-colors uppercase"
+            >
+              Export CSV
+            </button>
+          </div>
+          {rsvps.length === 0 ? (
+            <p className="text-zinc-600 italic">No RSVPs yet.</p>
+          ) : (
+            <div className="overflow-x-auto rounded-2xl border border-white/10">
+              <table className="w-full text-sm">
+                <thead className="bg-white/5 text-zinc-400 uppercase text-xs tracking-wider">
+                  <tr>
+                    <th className="text-left px-4 py-3">Name</th>
+                    <th className="text-left px-4 py-3">Maiden Name</th>
+                    <th className="text-left px-4 py-3">Email</th>
+                    <th className="text-left px-4 py-3">Attending</th>
+                    <th className="text-left px-4 py-3">Guest</th>
+                    <th className="text-left px-4 py-3">Dietary</th>
+                    <th className="text-left px-4 py-3">Submitted</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rsvps.map((r, i) => (
+                    <tr key={r.id} className={i % 2 === 0 ? 'bg-white/[0.02]' : ''}>
+                      <td className="px-4 py-3 font-medium">{r.name}</td>
+                      <td className="px-4 py-3 text-zinc-400">{r.maiden_name || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-300">{r.email}</td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase ${
+                          r.attending === 'yes' ? 'bg-emerald-900 text-emerald-300' :
+                          r.attending === 'maybe' ? 'bg-yellow-900 text-yellow-300' :
+                          'bg-red-900 text-red-300'
+                        }`}>
+                          {r.attending}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-zinc-400">{r.guest_name || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-400">{r.dietary || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(r.created_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
       </div>
     </div>
