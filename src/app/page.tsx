@@ -44,10 +44,10 @@ export default function Home() {
           </p>
 
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <a href="venmo://paycharge?txn=pay&recipients=BCHSclassof2006&amount=26.50&note=BCHS%202006%20Reunion" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
+            <a href="https://venmo.com/BCHSclassof2006" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 py-6 bg-[#008CFF] hover:bg-[#0074D4] text-white font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
               VENMO @BCHSclassof2006
             </a>
-            <a href="https://paypal.me/BCHSclassof2006/26.50" target="_blank" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
+            <a href="https://paypal.me/BCHSHuskies2006/26.50" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 py-6 bg-[#FFC439] hover:bg-[#F2B932] text-[#003087] font-black rounded-2xl transition-all transform hover:scale-105 uppercase">
               PAYPAL @BCHSclassof2006
             </a>
           </div>
