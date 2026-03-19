@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photo Approval Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #09090b; color: #fff; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; padding: 2rem; }
+    h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -0.05em; margin-bottom: 3rem; }
+    h1 span { color: #38bdf8; }
+    h2 { font-size: 1rem; font-weight: 700; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+    .grid-sm { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.75rem; }
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; overflow: hidden; }
+    .card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #18181b; }
+    .card-body { padding: 1rem; }
+    .card-body p { font-weight: 700; margin-bottom: 0.75rem; font-size: 0.9rem; color: #a1a1aa; }
+    .btn-row { display: flex; gap: 0.5rem; }
+    .btn { flex: 1; padding: 0.6rem; border: none; border-radius: 0.5rem; font-weight: 900; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; }
+    .btn-approve { background: #059669; color: #fff; }
+    .btn-reject  { background: #dc2626; color: #fff; }
+    .thumb { position: relative; border-radius: 0.5rem; overflow: hidden; aspect-ratio: 1; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; background: #18181b; transition: filter 0.3s; filter: grayscale(100%); }
+    .thumb:hover img { filter: grayscale(0%); }
+    .thumb button { position: absolute; top: 4px; right: 4px; background: #dc2626; border: none; color: #fff; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; display: none; align-items: center; justify-content: center; }
+    .thumb:hover button { display: flex; }
+    #auth-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .auth-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 2.5rem; width: 100%; max-width: 380px; text-align: center; }
+    .auth-box .lock { font-size: 3rem; margin-bottom: 1rem; }
+    .auth-box h2 { font-size: 1.5rem; color: #fff; margin-bottom: 0.5rem; }
+    .auth-box p { color: #71717a; font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .auth-box input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; padding: 0.9rem; color: #fff; font-size: 1.5rem; font-weight: 900; text-align: center; letter-spacing: 0.3em; margin-bottom: 0.75rem; outline: none; }
+    .auth-box input:focus { border-color: #38bdf8; }
+    .auth-box input.error { border-color: #dc2626; }
+    .auth-box .err-msg { color: #dc2626; font-size: 0.8rem; margin-bottom: 0.75rem; min-height: 1.2rem; }
+    .auth-box .btn-enter { width: 100%; padding: 0.9rem; background: #0284c7; color: #fff; border: none; border-radius: 0.75rem; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: background 0.15s; }
+    .auth-box .btn-enter:hover { background: #38bdf8; }
+    #main { max-width: 1200px; margin: 0 auto; display: none; }
+    #loading { text-align: center; color: #71717a; padding: 3rem; }
+    .empty { color: #52525b; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="lock">🔒</div>
+    <h2>Admin Access</h2>
+    <p>Enter the admin key to manage photos.</p>
+    <input type="password" id="key-input" placeholder="••••••••" autocomplete="off" />
+    <div class="err-msg" id="err-msg"></div>
+    <button class="btn-enter" onclick="tryLogin()">Enter Dashboard</button>
+  </div>
+</div>
+
+<div id="main">
+  <h1>Photo Approval <span>Dashboard</span></h1>
+  <h2 id="pending-title">PENDING APPROVAL (0)</h2>
+  <div id="pending-grid" class="grid"></div>
+  <h2 id="approved-title">APPROVED PHOTOS (0)</h2>
+  <div id="approved-grid" class="grid-sm"></div>
+</div>
+
+<script>
+  const CORRECT_KEY = 'HUSKY2006';
+  let adminKey = '';
+  let allPhotos = [];
+
+  function tryLogin() {
+    const val = document.getElementById('key-input').value.trim();
+    if (val === CORRECT_KEY) {
+      adminKey = val;
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      loadPhotos();
+    } else {
+      document.getElementById('key-input').classList.add('error');
+      document.getElementById('err-msg').textContent = 'Incorrect key. Try again!';
+      document.getElementById('key-input').value = '';
+    }
+  }
+
+  document.getElementById('key-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryLogin();
+    document.getElementById('key-input').classList.remove('error');
+    document.getElementById('err-msg').textContent = '';
+  });
+
+  async function loadPhotos() {
+    document.getElementById('pending-grid').innerHTML = '<div id="loading">Loading photos...</div>';
+    try {
+      const res = await fetch(`/api/admin/photos?key=${adminKey}`);
+      allPhotos = await res.json();
+      render();
+    } catch(e) {
+      document.getElementById('pending-grid').innerHTML = '<p style="color:#ef4444">Failed to load photos. Please refresh.</p>';
+    }
+  }
+
+  async function updateStatus(id, status) {
+    await fetch('/api/admin/photos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, status, key: adminKey })
+    });
+    allPhotos = allPhotos.map(p => p.id === id ? { ...p, status } : p);
+    render();
+  }
+
+  function render() {
+    const pending  = allPhotos.filter(p => p.status === 'pending');
+    const approved = allPhotos.filter(p => p.status === 'approved');
+
+    document.getElementById('pending-title').textContent  = `PENDING APPROVAL (${pending.length})`;
+    document.getElementById('approved-title').textContent = `APPROVED PHOTOS (${approved.length})`;
+
+    const pg = document.getElementById('pending-grid');
+    if (pending.length === 0) {
+      pg.innerHTML = '<p class="empty">No pending photos to review.</p>';
+    } else {
+      pg.innerHTML = pending.map(p => `
+        <div class="card">
+          <img src="${p.url}" alt="Pending" loading="lazy" />
+          <div class="card-body">
+            <p>${p.caption || 'No caption'}</p>
+            <div class="btn-row">
+              <button class="btn btn-approve" onclick="updateStatus(${p.id}, 'approved')">✓ APPROVE</button>
+              <button class="btn btn-reject"  onclick="updateStatus(${p.id}, 'rejected')">✕ REJECT</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    const ag = document.getElementById('approved-grid');
+    if (approved.length === 0) {
+      ag.innerHTML = '<p class="empty">No approved photos yet.</p>';
+    } else {
+      ag.innerHTML = approved.map(p => `
+        <div class="thumb">
+          <img src="${p.url}" alt="Approved" loading="lazy" />
+          <button onclick="updateStatus(${p.id}, 'rejected')" title="Un-approve">✕</button>
+        </div>`).join('');
+    }
+  }
+</script>
+</body>
+</html>
