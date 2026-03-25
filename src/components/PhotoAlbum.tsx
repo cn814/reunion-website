@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import PhotoBackground from './PhotoBackground';
 
 
@@ -105,13 +106,21 @@ export default function PhotoAlbum() {
             Got some old photos? Upload them below (pending approval)!
           </p>
           
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="mt-8 px-8 py-3 bg-husky-blue hover:bg-husky-light-blue text-white font-bold rounded-full transition-all flex items-center gap-2 mx-auto shadow-lg shadow-husky-blue/20"
-          >
-            <span>📸</span>
-            UPLOAD MEMORIES
-          </button>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-8 py-3 bg-husky-blue hover:bg-husky-light-blue text-white font-bold rounded-full transition-all flex items-center gap-2 shadow-lg shadow-husky-blue/20"
+            >
+              <span>📸</span>
+              UPLOAD MEMORIES
+            </button>
+            <Link
+              href="/gallery"
+              className="px-8 py-3 border border-white/20 hover:border-husky-light-blue text-white/70 hover:text-husky-light-blue font-bold rounded-full transition-all flex items-center gap-2"
+            >
+              VIEW ALL PHOTOS →
+            </Link>
+          </div>
         </div>
 
         {loading ? (

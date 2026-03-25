@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const navItems = [
   { name: 'RSVP', href: '#rsvp' },
@@ -44,6 +45,12 @@ export default function Navbar() {
                 {item.name}
               </a>
             ))}
+            <Link
+              href="/gallery"
+              className="text-husky-light-blue hover:text-white text-xs uppercase font-black tracking-widest transition-colors border border-husky-light-blue/40 px-3 py-1 rounded-full hover:border-white/40"
+            >
+              Gallery
+            </Link>
           </div>
           <div className="md:hidden">
             {/* Simple Mobile indicator or Menu could go here, but keeping it minimal for now */}
