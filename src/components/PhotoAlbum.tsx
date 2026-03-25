@@ -208,6 +208,15 @@ function Slideshow({ photos }: { photos: Photo[] }) {
     return () => clearInterval(timer);
   }, [photos.length]);
 
+  // Fallback: if a photo's request hangs (no onLoad or onError), advance after 6s
+  useEffect(() => {
+    if (loadedIndex >= photos.length) return;
+    const timer = setTimeout(() => {
+      setLoadedIndex(i => i + 1);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, [loadedIndex, photos.length]);
+
   const next = () => setCurrentIndex((prev) => (prev + 1) % photos.length);
   const prev = () => setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
 
