@@ -51,9 +51,16 @@ function AdminContent() {
     setIsMounted(true);
     if (key === 'HUSKY2006') {
       setAuthorized(true);
-      fetchPhotos();
-      fetchRsvps();
-      fetchYearbook();
+      // Ensure the site_auth cookie is set so photo proxy requests succeed
+      fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: '2006' }),
+      }).finally(() => {
+        fetchPhotos();
+        fetchRsvps();
+        fetchYearbook();
+      });
     } else {
       setLoading(false);
     }
