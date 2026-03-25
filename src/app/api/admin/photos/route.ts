@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       .map((row: any) => {
         const rawUrl: string = row.url;
         const filename = rawUrl.startsWith('http') ? (rawUrl.split('/').pop() ?? rawUrl) : rawUrl;
-        return { ...row, url: `/api/photos/${filename}` };
+        return { ...row, url: `/api/admin/photos/${filename}?key=${key}` };
       });
 
     return NextResponse.json(photos);
