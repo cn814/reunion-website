@@ -51,7 +51,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
-    const filename = `${Date.now()}-${file.name}`;
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 });
+    }
+
+    // Generate a safe filename — never trust file.name from the client
+    const ext = (file.type.split('/')[1] || 'jpg').replace(/[^a-z0-9]/g, '');
+    const filename = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
     await bucket.put(filename, file.stream(), {
       httpMetadata: { contentType: file.type }
     });
