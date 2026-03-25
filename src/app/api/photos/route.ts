@@ -3,15 +3,23 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 
 
-export async function GET() {
+const R2_PUBLIC_URL = 'https://pub-615a7ab081634ff89d67092401b432b0.r2.dev';
+
+export async function GET(req: NextRequest) {
+  // Protect the listing so bots can never discover photo URLs
+  const cookie = req.cookies.get('site_auth');
+  if (!cookie || cookie.value !== 'ok') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const context = await getCloudflareContext({ async: true });
     const env = (context as any)?.env;
     const db = env?.DB;
 
     if (!db) {
-      return NextResponse.json({ 
-        error: 'Database binding (DB) is missing.', 
+      return NextResponse.json({
+        error: 'Database binding (DB) is missing.',
         suggestion: 'Go to your Cloudflare Pages dashboard > Settings > Functions > D1 Database Bindings and add a binding named "DB" to your "reunion-db" database.'
       }, { status: 500 });
     }
@@ -20,10 +28,11 @@ export async function GET() {
       "SELECT * FROM photos WHERE status = 'approved' ORDER BY created_at DESC"
     ).all();
 
-    const photos = (results || []).map((row: any) => ({
-      ...row,
-      url: `/api/photos/${row.url.startsWith('http') ? row.url.split('/').pop() : row.url}`,
-    }));
+    // Serve images directly from R2 CDN — no Worker proxy needed
+    const photos = (results || []).map((row: any) => {
+      const filename = row.url.startsWith('http') ? row.url.split('/').pop() : row.url;
+      return { ...row, url: `${R2_PUBLIC_URL}/${filename}` };
+    });
 
     return NextResponse.json(photos, {
       headers: { 'cache-control': 'private, max-age=300' },
