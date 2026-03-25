@@ -212,30 +212,36 @@ function Slideshow({ photos }: { photos: Photo[] }) {
 
   return (
     <div className="relative w-full h-full group/slide">
-      {photos.map((photo, index) => (
-        <div
-          key={photo.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-        >
-          {/* Blurred background fill */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={photo.url}
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover absolute inset-0 scale-110 blur-xl opacity-40"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={photo.url}
-            alt={photo.caption || 'Class Memory'}
-            className="w-full h-full object-cover absolute inset-0"
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
-            <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
+      {photos.map((photo, index) => {
+        // Only render src for current slide and immediate neighbours — avoids simultaneous Worker requests
+        const isNear = Math.abs(index - currentIndex) <= 1 ||
+          (currentIndex === 0 && index === photos.length - 1) ||
+          (currentIndex === photos.length - 1 && index === 0);
+        const src = isNear ? photo.url : undefined;
+        return (
+          <div
+            key={photo.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt=""
+              aria-hidden="true"
+              className="w-full h-full object-cover absolute inset-0 scale-110 blur-xl opacity-40"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={src}
+              alt={photo.caption || 'Class Memory'}
+              className="w-full h-full object-cover absolute inset-0"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
+              <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Navigation Controls */}
       <button 
