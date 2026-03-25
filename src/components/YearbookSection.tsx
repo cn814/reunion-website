@@ -102,6 +102,16 @@ export default function YearbookSection() {
           <p className="mt-6 text-zinc-500 max-w-2xl mx-auto text-lg italic">
             All {yearbookPhotos.length} of us, forever immortalized in grainy school-photo glory.
           </p>
+          <div className="flex items-center justify-center gap-6 mt-4 text-sm text-zinc-400">
+            <span className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-xs font-black text-white">✓</span>
+              Coming
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center text-xs font-black text-white">✕</span>
+              Not coming
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
