@@ -131,6 +131,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="py-12 border-t border-white/10 text-center text-zinc-500 text-sm bg-black">
         <p>© 2026 Bishop Carroll Class of 2006. Built with nostalgia and Husky Pride.</p>
+        <p className="mt-2"><a href="mailto:cneale.n@gmail.com" className="hover:text-zinc-300 underline transition-colors">Contact Website Manager</a></p>
       </footer>
     </main>
     </PasswordProtection>
