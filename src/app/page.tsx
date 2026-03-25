@@ -132,6 +132,9 @@ export default function Home() {
       <footer className="py-12 border-t border-white/10 text-center text-zinc-500 text-sm bg-black">
         <p>© 2026 Bishop Carroll Class of 2006. Built with nostalgia and Husky Pride.</p>
         <p className="mt-2"><a href="mailto:cneale.n@gmail.com" className="hover:text-zinc-300 underline transition-colors">Contact Website Manager</a></p>
+        <p className="mt-6 max-w-xl mx-auto text-zinc-600 text-xs leading-relaxed">
+          Privacy notice: This site is password-protected and not indexed by search engines. Yearbook and album photos are served only to authenticated visitors and are blocked from web crawlers, Google Images, and similar services. Photos are not publicly accessible via direct URL.
+        </p>
       </footer>
     </main>
     </PasswordProtection>

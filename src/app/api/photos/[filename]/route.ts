@@ -7,6 +7,11 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ filename: string }> }
 ) {
+  const cookie = req.cookies.get('site_auth');
+  if (!cookie || cookie.value !== 'ok') {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
   try {
     const { env } = await getCloudflareContext({ async: true });
     const bucket = env.BUCKET as any;

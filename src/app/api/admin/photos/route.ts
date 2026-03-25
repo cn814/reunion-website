@@ -21,7 +21,12 @@ export async function GET(req: NextRequest) {
       "SELECT * FROM photos ORDER BY created_at DESC LIMIT 50"
     ).all();
 
-    return NextResponse.json(results);
+    const photos = (results || []).map((row: any) => ({
+      ...row,
+      url: `/api/photos/${row.url.startsWith('http') ? row.url.split('/').pop() : row.url}`,
+    }));
+
+    return NextResponse.json(photos);
   } catch (error) {
     console.error('Error fetching admin photos:', error);
     return NextResponse.json({ error: 'Failed to fetch photos' }, { status: 500 });

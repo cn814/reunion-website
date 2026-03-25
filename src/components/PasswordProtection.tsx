@@ -17,9 +17,14 @@ export default function PasswordProtection({ children }: { children: React.React
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === '2006') {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    if (res.ok) {
       localStorage.setItem('site_unlocked', 'true');
       setIsAuthenticated(true);
       setError(false);

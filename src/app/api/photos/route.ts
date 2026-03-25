@@ -20,7 +20,12 @@ export async function GET() {
       "SELECT * FROM photos WHERE status = 'approved' ORDER BY created_at DESC"
     ).all();
 
-    return NextResponse.json(results || []);
+    const photos = (results || []).map((row: any) => ({
+      ...row,
+      url: `/api/photos/${row.url.startsWith('http') ? row.url.split('/').pop() : row.url}`,
+    }));
+
+    return NextResponse.json(photos);
   } catch (error: any) {
     console.error('Error fetching photos:', error);
     return NextResponse.json({ error: `API Error (GET): ${error.message || 'Unknown'}` }, { status: 500 });
@@ -63,11 +68,9 @@ export async function POST(req: NextRequest) {
       httpMetadata: { contentType: file.type }
     });
 
-    const url = `https://pub-615a7ab081634ff89d67092401b432b0.r2.dev/${filename}`;
-
     await db.prepare(
       "INSERT INTO photos (url, caption, uploaded_by, status) VALUES (?, ?, ?, 'pending')"
-    ).bind(url, caption, uploadedBy).run();
+    ).bind(filename, caption, uploadedBy).run();
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
