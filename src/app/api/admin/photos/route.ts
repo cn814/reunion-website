@@ -21,11 +21,13 @@ export async function GET(req: NextRequest) {
       "SELECT * FROM photos ORDER BY created_at DESC LIMIT 50"
     ).all();
 
-    const R2_PUBLIC_URL = 'https://pub-615a7ab081634ff89d67092401b432b0.r2.dev';
-    const photos = (results || []).map((row: any) => {
-      const filename = row.url.startsWith('http') ? row.url.split('/').pop() : row.url;
-      return { ...row, url: `${R2_PUBLIC_URL}/${filename}` };
-    });
+    const photos = (results || [])
+      .filter((row: any) => row.url)
+      .map((row: any) => {
+        const rawUrl: string = row.url;
+        const filename = rawUrl.startsWith('http') ? (rawUrl.split('/').pop() ?? rawUrl) : rawUrl;
+        return { ...row, url: `/api/photos/${filename}` };
+      });
 
     return NextResponse.json(photos);
   } catch (error) {

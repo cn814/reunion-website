@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 
-
-
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ filename: string }> }
 ) {
+  const cookie = req.cookies.get('site_auth');
+  if (!cookie || cookie.value !== 'ok') {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
+  const { filename } = await params;
+
+  // Check Cloudflare edge cache first — avoids R2 fetch and Worker CPU on repeat requests
+  const cache = caches.default;
+  const cacheKey = new Request(`https://cache.internal/photos/${filename}`);
+  const cached = await cache.match(cacheKey);
+  if (cached) return cached;
+
   try {
     const { env } = await getCloudflareContext({ async: true });
     const bucket = env.BUCKET as any;
@@ -15,7 +26,6 @@ export async function GET(
       return NextResponse.json({ error: 'R2 Bucket not configured' }, { status: 500 });
     }
 
-    const { filename } = await params;
     const object = await bucket.get(filename);
 
     if (!object) {
@@ -25,10 +35,14 @@ export async function GET(
     const headers = new Headers();
     object.writeHttpMetadata(headers);
     headers.set('etag', object.httpEtag);
-    // Cache in browser for 1 hour — avoids hammering the Worker on every page load/refresh
-    headers.set('cache-control', 'private, max-age=3600');
+    headers.set('cache-control', 'public, max-age=86400'); // 24h edge cache
 
-    return new NextResponse(object.body, { headers });
+    const response = new NextResponse(object.body, { headers });
+
+    // Store in Cloudflare edge cache so future requests skip R2 entirely
+    await cache.put(cacheKey, response.clone());
+
+    return response;
   } catch (error) {
     console.error('Error fetching image from R2:', error);
     return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 });

@@ -3,8 +3,6 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 
 
-const R2_PUBLIC_URL = 'https://pub-615a7ab081634ff89d67092401b432b0.r2.dev';
-
 export async function GET(_req: NextRequest) {
   try {
     const context = await getCloudflareContext({ async: true });
@@ -22,11 +20,14 @@ export async function GET(_req: NextRequest) {
       "SELECT * FROM photos WHERE status = 'approved' ORDER BY created_at DESC"
     ).all();
 
-    // Serve images directly from R2 CDN — no Worker proxy needed
-    const photos = (results || []).map((row: any) => {
-      const filename = row.url.startsWith('http') ? row.url.split('/').pop() : row.url;
-      return { ...row, url: `${R2_PUBLIC_URL}/${filename}` };
-    });
+    // Proxy through Worker so private R2 bucket stays inaccessible directly
+    const photos = (results || [])
+      .filter((row: any) => row.url)
+      .map((row: any) => {
+        const rawUrl: string = row.url;
+        const filename = rawUrl.startsWith('http') ? (rawUrl.split('/').pop() ?? rawUrl) : rawUrl;
+        return { ...row, url: `/api/photos/${filename}` };
+      });
 
     return NextResponse.json(photos, {
       headers: { 'cache-control': 'private, max-age=300' },
