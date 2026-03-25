@@ -12,15 +12,19 @@ export default function PasswordProtection({ children }: { children: React.React
     const unlocked = localStorage.getItem('site_unlocked');
     if (unlocked === 'true') {
       // Verify the server-side auth cookie is still present
-      fetch('/api/auth/check').then(res => {
-        if (res.ok) {
-          setIsAuthenticated(true);
-        } else {
-          // Cookie missing (e.g. first visit after auth upgrade) — re-authenticate
+      fetch('/api/auth/check')
+        .then(res => {
+          if (res.ok) {
+            setIsAuthenticated(true);
+          } else {
+            localStorage.removeItem('site_unlocked');
+            setIsAuthenticated(false);
+          }
+        })
+        .catch(() => {
           localStorage.removeItem('site_unlocked');
           setIsAuthenticated(false);
-        }
-      });
+        });
     } else {
       setIsAuthenticated(false);
     }

@@ -5,13 +5,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 const R2_PUBLIC_URL = 'https://pub-615a7ab081634ff89d67092401b432b0.r2.dev';
 
-export async function GET(req: NextRequest) {
-  // Protect the listing so bots can never discover photo URLs
-  const cookie = req.cookies.get('site_auth');
-  if (!cookie || cookie.value !== 'ok') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
+export async function GET(_req: NextRequest) {
   try {
     const context = await getCloudflareContext({ async: true });
     const env = (context as any)?.env;
