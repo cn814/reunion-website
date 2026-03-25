@@ -12,12 +12,6 @@ export async function GET(
 
   const { filename } = await params;
 
-  // Check Cloudflare edge cache first — avoids R2 fetch and Worker CPU on repeat requests
-  const cache = (caches as any).default as Cache;
-  const cacheKey = new Request(`https://cache.internal/photos/${filename}`);
-  const cached = await cache.match(cacheKey);
-  if (cached) return cached;
-
   try {
     const { env } = await getCloudflareContext({ async: true });
     const bucket = env.BUCKET as any;
@@ -35,14 +29,9 @@ export async function GET(
     const headers = new Headers();
     object.writeHttpMetadata(headers);
     headers.set('etag', object.httpEtag);
-    headers.set('cache-control', 'public, max-age=86400'); // 24h edge cache
+    headers.set('cache-control', 'private, max-age=86400'); // browser caches for 24h
 
-    const response = new NextResponse(object.body, { headers });
-
-    // Store in Cloudflare edge cache so future requests skip R2 entirely
-    await cache.put(cacheKey, response.clone());
-
-    return response;
+    return new NextResponse(object.body, { headers });
   } catch (error) {
     console.error('Error fetching image from R2:', error);
     return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 });
