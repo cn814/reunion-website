@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
-  const { password } = await request.json();
+  const { password } = await request.json() as { password: string };
 
   if (password !== '2006') {
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
