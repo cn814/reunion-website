@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PhotoBackground from './PhotoBackground';
 
 const yearbookPhotos = [
@@ -71,9 +71,26 @@ const yearbookPhotos = [
   'Yolanda Gardner',
 ];
 
+const INITIAL_COUNT = 18;
+const BATCH_SIZE = 18;
+
 export default function YearbookSection() {
   const [selected, setSelected] = useState<string | null>(null);
   const [rsvpStatus, setRsvpStatus] = useState<Record<string, string>>({});
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        setVisibleCount(prev => Math.min(prev + BATCH_SIZE, yearbookPhotos.length));
+      }
+    }, { rootMargin: '200px' });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     fetch('/api/attendees')
@@ -115,7 +132,7 @@ export default function YearbookSection() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-          {yearbookPhotos.map((name) => {
+          {yearbookPhotos.slice(0, visibleCount).map((name) => {
             const status = rsvpStatus[name];
             return (
               <button
@@ -127,6 +144,8 @@ export default function YearbookSection() {
                 <img
                   src={`/photos/yearbook-photos/${encodeURIComponent(name)}.jpg`}
                   alt={name}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
                 />
                 {/* RSVP badge */}
@@ -141,6 +160,9 @@ export default function YearbookSection() {
               </button>
             );
           })}
+          {visibleCount < yearbookPhotos.length && (
+            <div ref={sentinelRef} className="col-span-full h-4" />
+          )}
         </div>
       </div>
 

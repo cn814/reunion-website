@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bishop Carroll Class of 2006 — Reunion Website
 
-## Getting Started
+A private reunion website for the Bishop Carroll High School Class of 2006. Built with Next.js and deployed on Cloudflare Workers.
 
-First, run the development server:
+## Features
+
+- **Password protection** — site requires the graduation year to enter; auth is enforced server-side via an HttpOnly cookie
+- **Countdown timer** — live countdown to the reunion date (September 26, 2026)
+- **RSVP form** — classmates can RSVP and their status appears as a badge on their yearbook photo
+- **Yearbook photos** — full class grid with progressive loading, RSVP badges, and a lightbox viewer
+- **Class photo album** — classmates can upload memories for review; approved photos display in a slideshow
+- **Payment hub** — Venmo and PayPal links for reunion fees
+- **In Memoriam** — section honoring classmates we've lost
+- **Nostalgia section** — time capsule of what we were all doing in 2006
+- **Admin panel** — password-protected page to approve/reject uploaded photos
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Styling | Tailwind CSS 4 |
+| Deployment | Cloudflare Workers via OpenNext |
+| Database | Cloudflare D1 (SQLite) |
+| File storage | Cloudflare R2 |
+| Language | TypeScript |
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Enter `2006` at the password screen.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Note:** D1 and R2 bindings are not available in `next dev`. Use `npm run preview` to test with real Cloudflare bindings locally via Wrangler.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run preview
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Deploys automatically via Cloudflare Pages on push to `main`. To deploy manually:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run deploy
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Cloudflare Dashboard Requirements
 
-## Deploy on Vercel
+The following bindings must be configured in the Cloudflare dashboard for the Worker to function:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Binding | Type | Name |
+|---|---|---|
+| `DB` | D1 Database | `reunion-db` |
+| `BUCKET` | R2 Bucket | `reunion-photos` |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The R2 bucket should have **public access disabled**. Photos are served through the Worker proxy at `/api/photos/[filename]`, which requires a valid session cookie.
+
+## Privacy & Security
+
+- The site is blocked from search engine indexing via `robots.txt` and `noindex` meta tags
+- Yearbook photos are protected by Next.js middleware — unauthenticated requests receive a 401
+- Uploaded photos in R2 are served only through an authenticated Worker proxy
+- Session cookies are HttpOnly and cannot be accessed by JavaScript
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── auth/
+│   │   │   ├── login/     # POST — validates password, sets session cookie
+│   │   │   └── check/     # GET  — verifies session cookie is present
+│   │   ├── photos/        # GET list / POST upload / GET [filename] proxy
+│   │   ├── admin/photos/  # Admin photo approval
+│   │   ├── attendees/     # RSVP list (used for yearbook badges)
+│   │   └── rsvp/          # RSVP submission
+│   ├── admin/             # Admin page
+│   └── page.tsx           # Main site
+├── components/
+│   ├── PasswordProtection.tsx
+│   ├── YearbookSection.tsx
+│   ├── PhotoAlbum.tsx
+│   ├── PhotoBackground.tsx
+│   ├── Hero.tsx
+│   ├── Countdown.tsx
+│   ├── RSVPForm.tsx
+│   ├── Navbar.tsx
+│   ├── GraduationVideo.tsx
+│   └── NostalgiaSection.tsx
+└── middleware.ts           # Protects /photos/yearbook-photos/* paths
+```
+
+## Admin Access
+
+Visit `/admin` and enter the admin key when prompted. The admin panel allows approving or rejecting uploaded photos before they appear on the site.
