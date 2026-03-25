@@ -40,6 +40,8 @@ function AdminContent() {
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [rsvpError, setRsvpError] = useState<string | null>(null);
+  const [photoLoadIndex, setPhotoLoadIndex] = useState(0);
 
   // Yearbook upload state
   const [ybName, setYbName] = useState('');
@@ -65,6 +67,7 @@ function AdminContent() {
       if (res.ok) {
         const data = await res.json() as Photo[];
         setPhotos(data);
+        setPhotoLoadIndex(0);
       }
     } catch (err) {
       console.error('Failed to fetch admin photos', err);
@@ -79,9 +82,13 @@ function AdminContent() {
       if (res.ok) {
         const data = await res.json() as RSVP[];
         setRsvps(data);
+      } else {
+        const d = await res.json() as any;
+        setRsvpError(`API error ${res.status}: ${d?.error ?? res.statusText}`);
       }
     } catch (err) {
       console.error('Failed to fetch RSVPs', err);
+      setRsvpError(String(err));
     }
   };
 
@@ -260,11 +267,22 @@ function AdminContent() {
             <p className="text-zinc-600 italic">No pending photos to review.</p>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {pending.map(photo => (
+              {pending.map((photo, index) => {
+                const pendingOffset = approved.length;
+                const globalIndex = pendingOffset + index;
+                return (
                 <div key={photo.id} className="glass rounded-2xl overflow-hidden border-white/10">
                   <div className="w-full h-64 bg-zinc-900 rounded-t-2xl overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={photo.url} alt="Pending" loading="lazy" className="w-full h-full object-cover" />
+                    {globalIndex <= photoLoadIndex && (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={photo.url}
+                        alt="Pending"
+                        className="w-full h-full object-cover"
+                        onLoad={() => setPhotoLoadIndex(i => Math.max(i, globalIndex + 1))}
+                        onError={() => setPhotoLoadIndex(i => Math.max(i, globalIndex + 1))}
+                      />
+                    )}
                   </div>
                   <div className="p-6">
                     <p className="font-bold mb-6">{photo.caption || 'No caption'}</p>
@@ -284,7 +302,7 @@ function AdminContent() {
                     </div>
                   </div>
                 </div>
-              ))}
+              ); })}
             </div>
           )}
         </section>
@@ -292,10 +310,18 @@ function AdminContent() {
         <section className="mb-16">
           <h2 className="text-xl font-bold mb-6 text-zinc-400 uppercase">Approved Photos ({approved.length})</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
-            {approved.map(photo => (
-              <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photo.url} alt="Approved" loading="lazy" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" />
+            {approved.map((photo, index) => (
+              <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden group bg-zinc-900">
+                {index <= photoLoadIndex && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={photo.url}
+                    alt="Approved"
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all"
+                    onLoad={() => setPhotoLoadIndex(i => Math.max(i, index + 1))}
+                    onError={() => setPhotoLoadIndex(i => Math.max(i, index + 1))}
+                  />
+                )}
                 <button
                   onClick={() => updateStatus(photo.id, 'rejected')}
                   className="absolute top-2 right-2 bg-red-600 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
@@ -325,9 +351,12 @@ function AdminContent() {
               Export CSV
             </button>
           </div>
-          {rsvps.length === 0 ? (
+          {rsvpError && (
+            <p className="text-red-400 italic mb-4">Error loading RSVPs: {rsvpError}</p>
+          )}
+          {!rsvpError && rsvps.length === 0 ? (
             <p className="text-zinc-600 italic">No RSVPs yet.</p>
-          ) : (
+          ) : !rsvpError && (
             <div className="overflow-x-auto rounded-2xl border border-white/10">
               <table className="w-full text-sm">
                 <thead className="bg-white/5 text-zinc-400 uppercase text-xs tracking-wider">

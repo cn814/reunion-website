@@ -199,6 +199,7 @@ export default function PhotoAlbum() {
 
 function Slideshow({ photos }: { photos: Photo[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadedIndex, setLoadedIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -210,6 +211,10 @@ function Slideshow({ photos }: { photos: Photo[] }) {
   const next = () => setCurrentIndex((prev) => (prev + 1) % photos.length);
   const prev = () => setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
 
+  const handleLoaded = (index: number) => {
+    setLoadedIndex(i => Math.max(i, index + 1));
+  };
+
   return (
     <div className="relative w-full h-full group/slide">
       {photos.map((photo, index) => (
@@ -217,19 +222,25 @@ function Slideshow({ photos }: { photos: Photo[] }) {
           key={photo.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={photo.url}
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover absolute inset-0 scale-110 blur-xl opacity-40"
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={photo.url}
-            alt={photo.caption || 'Class Memory'}
-            className="w-full h-full object-cover absolute inset-0"
-          />
+          {index <= loadedIndex && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo.url}
+                alt=""
+                aria-hidden="true"
+                className="w-full h-full object-cover absolute inset-0 scale-110 blur-xl opacity-40"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={photo.url}
+                alt={photo.caption || 'Class Memory'}
+                className="w-full h-full object-cover absolute inset-0"
+                onLoad={() => handleLoaded(index)}
+                onError={() => handleLoaded(index)}
+              />
+            </>
+          )}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
             <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
           </div>

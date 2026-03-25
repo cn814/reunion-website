@@ -4,7 +4,8 @@
       "Bash(npm show:*)",
       "Bash(npm install:*)",
       "Bash(find /c/Users/cneal/.gemini/antigravity/scratch/class-reunion-site -type f \\\\\\(-name *admin* -o -path */admin/* \\\\\\))",
-      "Bash(find .open-next -name *.js -newer src/app/admin/page.tsx)"
+      "Bash(find .open-next -name *.js -newer src/app/admin/page.tsx)",
+      "Bash(npx tsc:*)"
     ],
     "additionalDirectories": [
       "c:\\Users\\cneal\\.gemini\\antigravity\\scratch\\class-reunion-site\\public\\photos\\yearbook-photos"
