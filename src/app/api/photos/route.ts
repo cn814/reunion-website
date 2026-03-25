@@ -25,7 +25,9 @@ export async function GET() {
       url: `/api/photos/${row.url.startsWith('http') ? row.url.split('/').pop() : row.url}`,
     }));
 
-    return NextResponse.json(photos);
+    return NextResponse.json(photos, {
+      headers: { 'cache-control': 'private, max-age=300' },
+    });
   } catch (error: any) {
     console.error('Error fetching photos:', error);
     return NextResponse.json({ error: `API Error (GET): ${error.message || 'Unknown'}` }, { status: 500 });

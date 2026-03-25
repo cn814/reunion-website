@@ -30,6 +30,8 @@ export async function GET(
     const headers = new Headers();
     object.writeHttpMetadata(headers);
     headers.set('etag', object.httpEtag);
+    // Cache in browser for 1 hour — avoids hammering the Worker on every page load/refresh
+    headers.set('cache-control', 'private, max-age=3600');
 
     return new NextResponse(object.body, { headers });
   } catch (error) {
