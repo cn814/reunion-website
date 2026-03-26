@@ -31,11 +31,14 @@ export async function POST(req: NextRequest) {
 
     const webhookUrl = (env as any).GOOGLE_SHEETS_WEBHOOK_URL || process.env.GOOGLE_SHEETS_WEBHOOK_URL;
     if (webhookUrl) {
-      fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, maiden_name: maiden_name || '', attending, guest_name: guest_name || '', email, dietary: dietary || '', suggestions: suggestions || '' }),
-      }).catch(() => {});
+      const { ctx } = await getCloudflareContext({ async: true });
+      ctx.waitUntil(
+        fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, maiden_name: maiden_name || '', attending, guest_name: guest_name || '', email, dietary: dietary || '', suggestions: suggestions || '' }),
+        }).catch(() => {})
+      );
     }
 
     return NextResponse.json({ success: true });
