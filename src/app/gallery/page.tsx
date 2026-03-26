@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import PasswordProtection from '@/components/PasswordProtection';
 
 interface Photo {
   id: number;
@@ -42,6 +43,7 @@ export default function GalleryPage() {
   }, [lightboxIndex, nextPhoto, prevPhoto, closeLightbox]);
 
   return (
+    <PasswordProtection>
     <div className="min-h-screen bg-husky-black text-white">
       <div className="max-w-6xl mx-auto px-4 py-20">
         <div className="mb-8">
@@ -133,5 +135,6 @@ export default function GalleryPage() {
         </div>
       )}
     </div>
+    </PasswordProtection>
   );
 }
