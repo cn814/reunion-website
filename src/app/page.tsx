@@ -105,10 +105,6 @@ export default function Home() {
                   <span className="text-husky-light-blue font-bold min-w-[80px]">WHERE:</span>
                   <span className="text-zinc-300">Bishop Carroll High School <br /> 728 Ben Franklin Hwy, Ebensburg, PA 15931</span>
                 </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-husky-light-blue font-bold min-w-[80px]">DRESS:</span>
-                  <span className="text-zinc-300">Smart Casual (Husky Blue optional, but encouraged!)</span>
-                </li>
               </ul>
 
 
