@@ -215,6 +215,96 @@ function AdminContent() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-black mb-12 uppercase tracking-tighter">Admin <span className="text-husky-light-blue">Dashboard</span></h1>
 
+        {/* Guest List — moved to top so it's always immediately visible */}
+        <section className="mb-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-zinc-400 uppercase">
+              Guest List ({rsvps.length})
+              <span className="ml-4 text-sm font-normal normal-case">
+                {rsvps.filter(r => r.attending === 'yes').length} attending &middot;&nbsp;
+                {rsvps.filter(r => r.attending === 'maybe').length} maybe &middot;&nbsp;
+                {rsvps.filter(r => r.attending === 'no').length} not coming
+              </span>
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={fetchRsvps}
+                className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-bold rounded-xl transition-colors uppercase"
+              >
+                Refresh
+              </button>
+              <a
+                href={`/api/admin/rsvps.csv?key=${key}`}
+                download="rsvps.csv"
+                className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-bold rounded-xl transition-colors uppercase"
+              >
+                Download CSV
+              </a>
+              <button
+                onClick={exportCsv}
+                className="px-4 py-2 bg-husky-blue hover:bg-husky-light-blue text-white text-sm font-bold rounded-xl transition-colors uppercase"
+              >
+                Export CSV
+              </button>
+            </div>
+          </div>
+          {rsvpLoading && <p className="text-zinc-500 italic mb-4">Loading RSVPs...</p>}
+          {rsvpError && (
+            <p className="text-red-400 italic mb-4">Error loading RSVPs: {rsvpError}</p>
+          )}
+          {!rsvpLoading && !rsvpError && rsvps.length === 0 ? (
+            <p className="text-zinc-600 italic">No RSVPs yet.</p>
+          ) : !rsvpLoading && !rsvpError && (
+            <div className="overflow-x-auto rounded-2xl border border-white/10">
+              <table className="w-full text-sm">
+                <thead className="bg-white/5 text-zinc-400 uppercase text-xs tracking-wider">
+                  <tr>
+                    <th className="text-left px-4 py-3">Photo</th>
+                    <th className="text-left px-4 py-3">Name</th>
+                    <th className="text-left px-4 py-3">Preferred Name</th>
+                    <th className="text-left px-4 py-3">Email</th>
+                    <th className="text-left px-4 py-3">Attending</th>
+                    <th className="text-left px-4 py-3">Guest</th>
+                    <th className="text-left px-4 py-3">Dietary</th>
+                    <th className="text-left px-4 py-3">Suggestions</th>
+                    <th className="text-left px-4 py-3">Submitted</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rsvps.map((r, i) => (
+                    <tr key={r.id} className={i % 2 === 0 ? 'bg-white/[0.02]' : ''}>
+                      <td className="px-4 py-2">
+                        {r.yearbook_photo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={r.yearbook_photo} alt={r.name} className="w-10 h-12 object-cover rounded-lg border border-white/10" />
+                        ) : (
+                          <div className="w-10 h-12 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center text-zinc-600 text-xs">?</div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 font-medium">{r.name}</td>
+                      <td className="px-4 py-3 text-zinc-400">{r.maiden_name || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-300">{r.email}</td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase ${
+                          r.attending === 'yes' ? 'bg-emerald-900 text-emerald-300' :
+                          r.attending === 'maybe' ? 'bg-yellow-900 text-yellow-300' :
+                          'bg-red-900 text-red-300'
+                        }`}>
+                          {r.attending}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-zinc-400">{r.guest_name || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-400">{r.dietary || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-400 max-w-xs truncate" title={r.suggestions || ''}>{r.suggestions || '—'}</td>
+                      <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(r.created_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
         {/* Yearbook Photos */}
         <section className="mb-16">
           <h2 className="text-xl font-bold mb-6 text-zinc-400 uppercase">Yearbook Photos ({yearbook.length})</h2>
@@ -344,88 +434,6 @@ function AdminContent() {
           </div>
         </section>
 
-        {/* Guest List */}
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-zinc-400 uppercase">
-              Guest List ({rsvps.length})
-              <span className="ml-4 text-sm font-normal normal-case">
-                {rsvps.filter(r => r.attending === 'yes').length} attending &middot;&nbsp;
-                {rsvps.filter(r => r.attending === 'maybe').length} maybe &middot;&nbsp;
-                {rsvps.filter(r => r.attending === 'no').length} not coming
-              </span>
-            </h2>
-            <div className="flex gap-2">
-              <button
-                onClick={fetchRsvps}
-                className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-bold rounded-xl transition-colors uppercase"
-              >
-                Refresh
-              </button>
-              <button
-                onClick={exportCsv}
-                className="px-4 py-2 bg-husky-blue hover:bg-husky-light-blue text-white text-sm font-bold rounded-xl transition-colors uppercase"
-              >
-                Export CSV
-              </button>
-            </div>
-          </div>
-          {rsvpLoading && <p className="text-zinc-500 italic mb-4">Loading RSVPs...</p>}
-          {rsvpError && (
-            <p className="text-red-400 italic mb-4">Error loading RSVPs: {rsvpError}</p>
-          )}
-          {!rsvpLoading && !rsvpError && rsvps.length === 0 ? (
-            <p className="text-zinc-600 italic">No RSVPs yet.</p>
-          ) : !rsvpLoading && !rsvpError && (
-            <div className="overflow-x-auto rounded-2xl border border-white/10">
-              <table className="w-full text-sm">
-                <thead className="bg-white/5 text-zinc-400 uppercase text-xs tracking-wider">
-                  <tr>
-                    <th className="text-left px-4 py-3">Photo</th>
-                    <th className="text-left px-4 py-3">Name</th>
-                    <th className="text-left px-4 py-3">Preferred Name</th>
-                    <th className="text-left px-4 py-3">Email</th>
-                    <th className="text-left px-4 py-3">Attending</th>
-                    <th className="text-left px-4 py-3">Guest</th>
-                    <th className="text-left px-4 py-3">Dietary</th>
-                    <th className="text-left px-4 py-3">Suggestions</th>
-                    <th className="text-left px-4 py-3">Submitted</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rsvps.map((r, i) => (
-                    <tr key={r.id} className={i % 2 === 0 ? 'bg-white/[0.02]' : ''}>
-                      <td className="px-4 py-2">
-                        {r.yearbook_photo ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={r.yearbook_photo} alt={r.name} className="w-10 h-12 object-cover rounded-lg border border-white/10" />
-                        ) : (
-                          <div className="w-10 h-12 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center text-zinc-600 text-xs">?</div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 font-medium">{r.name}</td>
-                      <td className="px-4 py-3 text-zinc-400">{r.maiden_name || '—'}</td>
-                      <td className="px-4 py-3 text-zinc-300">{r.email}</td>
-                      <td className="px-4 py-3">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-bold uppercase ${
-                          r.attending === 'yes' ? 'bg-emerald-900 text-emerald-300' :
-                          r.attending === 'maybe' ? 'bg-yellow-900 text-yellow-300' :
-                          'bg-red-900 text-red-300'
-                        }`}>
-                          {r.attending}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-zinc-400">{r.guest_name || '—'}</td>
-                      <td className="px-4 py-3 text-zinc-400">{r.dietary || '—'}</td>
-                      <td className="px-4 py-3 text-zinc-400 max-w-xs truncate" title={r.suggestions || ''}>{r.suggestions || '—'}</td>
-                      <td className="px-4 py-3 text-zinc-500 text-xs">{new Date(r.created_at).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
       </div>
     </div>
   );
