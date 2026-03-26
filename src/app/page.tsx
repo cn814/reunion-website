@@ -118,7 +118,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-[url('/photos/bishop-carroll-catholic-high-school-ebensburg-pa-primaryphoto.jpg')] bg-cover bg-center opacity-30 blur-sm" />
               <div className="relative z-10 w-full h-full flex flex-col items-center justify-center text-center p-8">
                 <p className="text-white font-black text-2xl mb-2 drop-shadow-md uppercase tracking-tighter">See You in Ebensburg</p>
-                <a href="https://maps.google.com" target="_blank" className="text-husky-light-blue underline font-bold">Open in Google Maps</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Bishop+Carroll+Catholic+High+School+Ebensburg+PA" target="_blank" className="text-husky-light-blue underline font-bold">Open in Google Maps</a>
               </div>
             </div>
           </div>
