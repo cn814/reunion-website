@@ -21,12 +21,14 @@ export async function GET(req: NextRequest) {
       "SELECT * FROM photos ORDER BY created_at DESC LIMIT 50"
     ).all();
 
+    const r2PublicUrl = process.env.R2_PUBLIC_URL?.replace(/\/$/, '');
     const photos = (results || [])
       .filter((row: any) => row.url)
       .map((row: any) => {
         const rawUrl: string = row.url;
         const filename = rawUrl.startsWith('http') ? (rawUrl.split('/').pop() ?? rawUrl) : rawUrl;
-        return { ...row, url: `/api/admin/photos/${filename}?key=${key}` };
+        const url = r2PublicUrl ? `${r2PublicUrl}/${filename}` : `/api/admin/photos/${filename}?key=${key}`;
+        return { ...row, url };
       });
 
     return NextResponse.json(photos);

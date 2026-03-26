@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
 interface Photo {
@@ -9,75 +9,10 @@ interface Photo {
   caption: string;
 }
 
-const CONCURRENCY = 4;
-const STALL_MS = 8000; // retry if no load/error within this window
-
 export default function GalleryPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  // Photos that have successfully loaded (drives queue advancement)
-  const [loadedSet, setLoadedSet] = useState<Set<number>>(new Set());
-  // Per-photo retry counter — appended to src URL to bust cache and retrigger request
-  const [retryMap, setRetryMap] = useState<Map<number, number>>(new Map());
-
-  // revealedUpTo: photos 0..revealedUpTo have their src rendered
-  // as each photo loads, loadedSet grows and the window slides forward
-  const revealedUpTo = Math.min(loadedSet.size + CONCURRENCY - 1, photos.length - 1);
-
-  // Per-photo stall timers
-  const stallTimers = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
-
-  const scheduleStall = useCallback((index: number) => {
-    // Clear any existing timer for this photo then start a fresh window
-    const prev = stallTimers.current.get(index);
-    if (prev) clearTimeout(prev);
-    const timer = setTimeout(() => {
-      // Bump retry counter → changes src URL → browser makes a fresh request
-      setRetryMap(m => {
-        const next = new Map(m);
-        next.set(index, (m.get(index) ?? 0) + 1);
-        return next;
-      });
-      scheduleStall(index); // keep watching for the next attempt
-    }, STALL_MS);
-    stallTimers.current.set(index, timer);
-  }, []);
-
-  const cancelStall = useCallback((index: number) => {
-    const timer = stallTimers.current.get(index);
-    if (timer) clearTimeout(timer);
-    stallTimers.current.delete(index);
-  }, []);
-
-  // When a photo successfully loads: advance the queue, stop watching it
-  const handleLoad = useCallback((index: number) => {
-    cancelStall(index);
-    setLoadedSet(prev => new Set([...prev, index]));
-  }, [cancelStall]);
-
-  // When a photo errors: retry immediately (bump src) and reset the stall window
-  const handleError = useCallback((index: number) => {
-    setRetryMap(m => {
-      const next = new Map(m);
-      next.set(index, (m.get(index) ?? 0) + 1);
-      return next;
-    });
-    scheduleStall(index);
-  }, [scheduleStall]);
-
-  // Start watching newly revealed photos that aren't loaded yet
-  useEffect(() => {
-    for (let i = 0; i <= revealedUpTo; i++) {
-      if (!loadedSet.has(i) && !stallTimers.current.has(i)) {
-        scheduleStall(i);
-      }
-    }
-  }, [loadedSet.size, revealedUpTo, scheduleStall]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Cleanup on unmount
-  useEffect(() => () => { stallTimers.current.forEach(t => clearTimeout(t)); }, []);
 
   useEffect(() => {
     fetch('/api/photos')
@@ -128,54 +63,29 @@ export default function GalleryPage() {
           <p className="text-zinc-500 italic text-center py-20">No photos yet.</p>
         ) : (
           <>
-            <p className="text-zinc-500 text-sm mb-8">
-              {photos.length} photos
-              {loadedSet.size < photos.length && (
-                <span className="ml-2 text-zinc-600">· {loadedSet.size} / {photos.length} loaded</span>
-              )}
-            </p>
+            <p className="text-zinc-500 text-sm mb-8">{photos.length} photos</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {photos.map((photo, index) => {
-                const retryCount = retryMap.get(index) ?? 0;
-                const src = retryCount > 0 ? `${photo.url}?r=${retryCount}` : photo.url;
-                const isRevealed = index <= revealedUpTo;
-                const isLoaded = loadedSet.has(index);
-
-                return (
-                  <div
-                    key={photo.id}
-                    className="relative aspect-square bg-zinc-900 rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => isLoaded && setLightboxIndex(index)}
-                  >
-                    {/* Spinner while in-flight */}
-                    {isRevealed && !isLoaded && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white/20" />
-                      </div>
-                    )}
-
-                    {isRevealed && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        key={retryCount} // key change forces img element to remount on retry
-                        src={src}
-                        alt={photo.caption || ''}
-                        className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
-                          isLoaded ? 'opacity-100' : 'opacity-0'
-                        }`}
-                        onLoad={() => handleLoad(index)}
-                        onError={() => handleError(index)}
-                      />
-                    )}
-
-                    {photo.caption && isLoaded && (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <p className="text-white text-xs truncate">{photo.caption}</p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {photos.map((photo, index) => (
+                <div
+                  key={photo.id}
+                  className="relative aspect-square bg-zinc-900 rounded-xl overflow-hidden cursor-pointer group"
+                  onClick={() => setLightboxIndex(index)}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photo.url}
+                    alt={photo.caption || ''}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {photo.caption && (
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <p className="text-white text-xs truncate">{photo.caption}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </>
         )}

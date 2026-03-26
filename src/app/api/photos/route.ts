@@ -20,13 +20,14 @@ export async function GET(_req: NextRequest) {
       "SELECT * FROM photos WHERE status = 'approved' ORDER BY created_at DESC"
     ).all();
 
-    // Proxy through Worker so private R2 bucket stays inaccessible directly
+    const r2PublicUrl = process.env.R2_PUBLIC_URL?.replace(/\/$/, '');
     const photos = (results || [])
       .filter((row: any) => row.url)
       .map((row: any) => {
         const rawUrl: string = row.url;
         const filename = rawUrl.startsWith('http') ? (rawUrl.split('/').pop() ?? rawUrl) : rawUrl;
-        return { ...row, url: `/api/photos/${filename}` };
+        const url = r2PublicUrl ? `${r2PublicUrl}/${filename}` : `/api/photos/${filename}`;
+        return { ...row, url };
       });
 
     return NextResponse.json(photos, {

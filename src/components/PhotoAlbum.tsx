@@ -206,13 +206,8 @@ export default function PhotoAlbum() {
   );
 }
 
-const SLIDESHOW_CONCURRENCY = 3;
-const SLIDESHOW_STALL_MS = 8000;
-
 function Slideshow({ photos }: { photos: Photo[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [doneCount, setDoneCount] = useState(0);
-  const revealedUpTo = Math.min(doneCount + SLIDESHOW_CONCURRENCY - 1, photos.length - 1);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -221,17 +216,8 @@ function Slideshow({ photos }: { photos: Photo[] }) {
     return () => clearInterval(timer);
   }, [photos.length]);
 
-  // Stall timeout: force-advance if a photo hangs
-  useEffect(() => {
-    if (doneCount >= photos.length) return;
-    const timer = setTimeout(() => setDoneCount(c => c + 1), SLIDESHOW_STALL_MS);
-    return () => clearTimeout(timer);
-  }, [doneCount, photos.length]);
-
   const next = () => setCurrentIndex((prev) => (prev + 1) % photos.length);
   const prev = () => setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
-
-  const handleLoaded = () => setDoneCount(c => c + 1);
 
   return (
     <div className="relative w-full h-full group/slide">
@@ -240,25 +226,23 @@ function Slideshow({ photos }: { photos: Photo[] }) {
           key={photo.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
-          {index <= revealedUpTo && (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.url}
-                alt=""
-                aria-hidden="true"
-                className="w-full h-full object-cover absolute inset-0 scale-110 blur-xl opacity-40"
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={photo.url}
-                alt={photo.caption || 'Class Memory'}
-                className="w-full h-full object-cover absolute inset-0"
-                onLoad={handleLoaded}
-                onError={handleLoaded}
-              />
-            </>
-          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photo.url}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover absolute inset-0 scale-110 blur-xl opacity-40"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={photo.url}
+            alt={photo.caption || 'Class Memory'}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover absolute inset-0"
+          />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-8 pt-20">
             <p className="text-white font-bold text-2xl mb-2 drop-shadow-md">{photo.caption}</p>
           </div>

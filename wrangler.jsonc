@@ -34,5 +34,8 @@
   ],
   "observability": {
     "enabled": true
+  },
+  "vars": {
+    "R2_PUBLIC_URL": "https://pub-615a7ab081634ff89d67092401b432b0.r2.dev"
   }
 }
