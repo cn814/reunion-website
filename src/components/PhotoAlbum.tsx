@@ -206,9 +206,13 @@ export default function PhotoAlbum() {
   );
 }
 
+const SLIDESHOW_CONCURRENCY = 3;
+const SLIDESHOW_STALL_MS = 8000;
+
 function Slideshow({ photos }: { photos: Photo[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loadedIndex, setLoadedIndex] = useState(0);
+  const [doneCount, setDoneCount] = useState(0);
+  const revealedUpTo = Math.min(doneCount + SLIDESHOW_CONCURRENCY - 1, photos.length - 1);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -217,21 +221,17 @@ function Slideshow({ photos }: { photos: Photo[] }) {
     return () => clearInterval(timer);
   }, [photos.length]);
 
-  // Fallback: if a photo's request hangs (no onLoad or onError), advance after 6s
+  // Stall timeout: force-advance if a photo hangs
   useEffect(() => {
-    if (loadedIndex >= photos.length) return;
-    const timer = setTimeout(() => {
-      setLoadedIndex(i => i + 1);
-    }, 6000);
+    if (doneCount >= photos.length) return;
+    const timer = setTimeout(() => setDoneCount(c => c + 1), SLIDESHOW_STALL_MS);
     return () => clearTimeout(timer);
-  }, [loadedIndex, photos.length]);
+  }, [doneCount, photos.length]);
 
   const next = () => setCurrentIndex((prev) => (prev + 1) % photos.length);
   const prev = () => setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
 
-  const handleLoaded = (index: number) => {
-    setLoadedIndex(i => Math.max(i, index + 1));
-  };
+  const handleLoaded = () => setDoneCount(c => c + 1);
 
   return (
     <div className="relative w-full h-full group/slide">
@@ -240,7 +240,7 @@ function Slideshow({ photos }: { photos: Photo[] }) {
           key={photo.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
         >
-          {index <= loadedIndex && (
+          {index <= revealedUpTo && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -254,8 +254,8 @@ function Slideshow({ photos }: { photos: Photo[] }) {
                 src={photo.url}
                 alt={photo.caption || 'Class Memory'}
                 className="w-full h-full object-cover absolute inset-0"
-                onLoad={() => handleLoaded(index)}
-                onError={() => handleLoaded(index)}
+                onLoad={handleLoaded}
+                onError={handleLoaded}
               />
             </>
           )}
