@@ -26,16 +26,21 @@ function getPhotos(): Promise<Photo[]> {
 }
 
 const SLOTS = 8;
-const CYCLE_MS = 3000;
+const CYCLE_MS = 5000;
 
 export default function PhotoBackground() {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [offset, setOffset] = useState(0);
+  const [slotIndices, setSlotIndices] = useState<number[]>([]);
   const [fadingSlot, setFadingSlot] = useState<number | null>(null);
+  const nextIndexRef = useState<{ current: number }>({ current: SLOTS })[0];
 
   useEffect(() => {
     getPhotos().then(data => {
-      if (data.length > 0) setPhotos(data);
+      if (data.length > 0) {
+        setPhotos(data);
+        setSlotIndices(Array.from({ length: SLOTS }, (_, i) => i % data.length));
+        nextIndexRef.current = SLOTS % data.length;
+      }
     });
   }, []);
 
@@ -46,7 +51,13 @@ export default function PhotoBackground() {
       const slot = Math.floor(Math.random() * SLOTS);
       setFadingSlot(slot);
       setTimeout(() => {
-        setOffset(prev => (prev + 1) % photos.length);
+        const next = nextIndexRef.current;
+        nextIndexRef.current = (next + 1) % photos.length;
+        setSlotIndices(prev => {
+          const updated = [...prev];
+          updated[slot] = next;
+          return updated;
+        });
         setFadingSlot(null);
       }, 600);
     }, CYCLE_MS);
@@ -54,21 +65,18 @@ export default function PhotoBackground() {
     return () => clearInterval(interval);
   }, [photos]);
 
-  if (photos.length === 0) return null;
-
-  const pool = [...photos, ...photos, ...photos];
-  const backgroundPhotos = pool.slice(offset, offset + SLOTS);
+  if (photos.length === 0 || slotIndices.length === 0) return null;
 
   return (
     <div className="absolute inset-0 z-0 opacity-[0.12] pointer-events-none grid grid-cols-2 md:grid-cols-4 gap-4 p-4 grayscale overflow-hidden">
-      {backgroundPhotos.map((photo, i) => (
+      {slotIndices.map((photoIdx, i) => (
         <div
-          key={`${photo.id}-${i}`}
+          key={i}
           style={{ transition: 'opacity 0.6s ease-in-out', opacity: fadingSlot === i ? 0 : 1 }}
           className={`relative aspect-square overflow-hidden rounded-2xl ${i % 2 === 0 ? 'mt-12' : ''} ${i % 3 === 0 ? '-rotate-3' : 'rotate-3'}`}
         >
           <img
-            src={photo.url}
+            src={photos[photoIdx].url}
             alt=""
             decoding="async"
             className="w-full h-full object-cover"
